@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kozmoloji & Fizik Ansiklopedisi</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Uzay Arka Plan Canvas -->
+    <canvas id="starfield"></canvas>
+
+    <!-- VS Code Tarzı Sol Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h3>🚀 Kontroller</h3>
+        </div>
+        <div class="sidebar-buttons">
+            <button class="action-btn" onclick="openRandomTopic()">🎲 Rastgele Konu</button>
+            <button class="action-btn" onclick="openSimModal()">⏳ Zaman Genişlemesi</button>
+            <button class="action-btn" onclick="openConverterModal()">📐 Birim Dönüştürücü</button>
+            <button id="warpBtn" class="action-btn">🚀 Işık Hızına Geç</button>
+            <button id="blackholeBtn" class="action-btn">🕳️ Karadelik Modu</button>
+        </div>
+    </aside>
+
+    <!-- Ana İçerik Alanı -->
+    <div class="main-wrapper">
+        <div class="container">
+            <header>
+                <h1>🌌 Kozmoloji & Fizik Ansiklopedisi</h1>
+                <p>Evrenin Temel Kanunları, Kuantum Dünyası ve Görelilik</p>
+            </header>
+
+            <!-- Arama ve Kategori Filtreleri -->
+            <div class="controls-wrapper">
+                <input type="text" id="searchInput" placeholder="Konu, bilim insanı veya kavram ara... (Kısayol: /)" onkeyup="filterCards()">
+                
+                <!-- Kategori Filtre Butonları -->
+                <div class="category-filters">
+                    <button class="cat-btn active" onclick="filterCategory('all', this)">Tümü</button>
+                    <button class="cat-btn" onclick="filterCategory('Görelilik', this)">Görelilik & Kozmoloji</button>
+                    <button class="cat-btn" onclick="filterCategory('Kuantum', this)">Kuantum Fiziği</button>
+                    <button class="cat-btn" onclick="filterCategory('Astrofizik', this)">Astrofizik & Yıldızlar</button>
+                    <button class="cat-btn" onclick="filterCategory('Parçacık', this)">Parçacık Fiziği</button>
+                    <button class="cat-btn" onclick="filterCategory('Klasik', this)">Klasik & Termodinamik</button>
+                    <button class="cat-btn" onclick="filterCategory('Bilim', this)">Bilim İnsanları</button>
+                    <button class="cat-btn" onclick="filterCategory('Teorik', this)">Teorik Fizik</button>
+                </div>
+            </div>
+
+            <!-- Kart Grid Alanı -->
+            <div class="card-grid"></div>
+        </div>
+    </div>
+
+    <!-- Detay Modal Kutusu -->
+    <div id="topicDetailModal" class="topic-modal" style="display: none;">
+        <div class="topic-modal-content">
+            <span class="close-topic-modal" onclick="closeModal()">&times;</span>
+            <div id="topicModalBody"></div>
+        </div>
+    </div>
+
+    <!-- Zaman Genişlemesi Simülasyon Modal -->
+    <div id="simModal" class="modal" style="display: none;">
+        <div class="modal-content sim-box">
+            <span class="close-btn" onclick="closeSimModal()">&times;</span>
+            <h2>⏳ Göreli Zaman Genişlemesi</h2>
+            <p>Işık hızına yakın seyahat eden bir gözlemci için zamanın nasıl yavaşladığını hesaplayın.</p>
+            
+            <div class="sim-control-group">
+                <label>Seyahat Hızı (% Işık Hızı): <span id="speedValue">%90 c</span></label>
+                <input type="range" id="speedInput" min="1" max="99" value="90" oninput="calculateTimeDilation()">
+            </div>
+
+            <div class="sim-control-group">
+                <label>Dünya'da Geçen Süre (Yıl):</label>
+                <input type="number" id="spaceTimeInput" value="10" oninput="calculateTimeDilation()">
+            </div>
+
+            <div class="sim-results">
+                <p>Gezginin Yaşadığı Süre: <strong id="earthTimeResult">22.94</strong> Yıl</p>
+                <p>Yaş Farkı (Dünya lehine): <strong id="ageDiffResult">12.94</strong> Yıl</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Birim Dönüştürücü Modal -->
+    <div id="converterModal" class="modal" style="display: none;">
+        <div class="modal-content sim-box">
+            <span class="close-btn" onclick="closeConverterModal()">&times;</span>
+            <h2>📐 Kozmik Birim Dönüştürücü</h2>
+            <p>Işık yılı değerini diğer astronomik mesafelerle dönüştürün.</p>
+            
+            <div class="sim-control-group">
+                <label>Işık Yılı (ly):</label>
+                <input type="number" id="lyInput" value="1" oninput="convertUnits()">
+            </div>
+
+            <div class="sim-results">
+                <p>Trilyon Kilometre: <strong id="kmResult">9.46 Trilyon km</strong></p>
+                <p>Astronomik Birim (AU): <strong id="auResult">63,241 AU</strong></p>
+                <p>Parsek (pc): <strong id="pcResult">0.307 pc</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Dosyaları -->
+    <script src="topicsData.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
