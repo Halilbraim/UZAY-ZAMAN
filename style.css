@@ -445,3 +445,40 @@ header p {
     border-color: #eab308;
     background: rgba(234, 179, 8, 0.15);
 }
+.nasa-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+  backdrop-filter: blur(10px);
+}
+
+.nasa-card h2 {
+  color: #00d2ff;
+  font-size: 1.4rem;
+  margin-top: 0;
+}
+/* KÜTLEÇEKİM MODALI KAPLAMA VE DÜZEN DÜZELTME */
+#gravityModal.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(2, 2, 8, 0.88);
+    backdrop-filter: blur(8px);
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+#gravityModal .modal-content {
+    background: #0b0c16;
+    border: 1px solid rgba(0, 210, 255, 0.3);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 0 40px rgba(0, 210, 255, 0.2);
+    position: relative;
+}

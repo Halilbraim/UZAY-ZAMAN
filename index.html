@@ -23,6 +23,8 @@
             <button class="action-btn" onclick="openConverterModal()">🌌 Uzay Ölçü Birimleri</button>
             <button class="action-btn" onclick="openQuizModal()">🎯 Bilgi Testi (Quiz)</button>
             <button class="action-btn" onclick="showFavorites()">⭐ Favorilerim</button>
+            <button class="action-btn" onclick="openNasaModal()">🌌 Günün Uzay Görseli (NASA)</button>
+            <button class="action-btn" onclick="openGravityModal()">🪐 Yörünge & Kütleçekim Lab</button>
             <button id="warpBtn" class="action-btn">🚀 Işık Hızına Geç</button>
             <button id="blackholeBtn" class="action-btn">🕳️ Karadelik Modu</button>
             <button id="ispatlarBtn" class="action-btn" onclick="openProofsModal()">
@@ -144,7 +146,53 @@
         </div>
     </div>
 
-    <!-- Veri Tabanı ve JS Dosyaları -->
+    <!-- NASA APOD Modal (Ortalanmış) -->
+    <div id="nasaModal" class="modal" style="display: none; align-items: center; justify-content: center;" onclick="if(event.target === this) closeAllModals()">
+        <div class="modal-content" style="max-width: 650px; width: 90%; margin: auto;">
+            <span class="close-btn" onclick="closeAllModals()">&times;</span>
+            <section id="nasa-apod-section">
+                <h2 style="color: #00d2ff; margin-bottom: 10px;">🌌 NASA - Günün Uzay Görseli</h2>
+                <div id="nasa-loading" style="color: #a0a0c0; padding: 20px; text-align: center;">NASA verileri ve Türkçe çeviri yükleniyor...</div>
+                <div id="nasa-content" style="display: none;">
+                    <img id="nasa-image" src="" alt="NASA Günün Görseli" style="width: 100%; max-height: 380px; object-fit: cover; border-radius: 8px; margin: 10px 0;">
+                    <h3 id="nasa-title" style="color: #a855f7; margin: 10px 0 5px 0;"></h3>
+                    <p id="nasa-explanation" style="font-size: 0.9em; line-height: 1.6; opacity: 0.9; max-height: 160px; overflow-y: auto; text-align: left; padding-right: 5px;"></p>
+                    <small id="nasa-date" style="color: #888; display: block; margin-top: 10px; text-align: right;"></small>
+                </div>
+            </section>
+        </div>
+    </div>
+<!-- Kütleçekim & Yörünge Simülasyon Modalı -->
+<div id="gravityModal" class="modal" style="display: none;" onclick="if(event.target === this) closeGravityModal()">
+    <div class="modal-content" style="max-width: 920px; width: 95%;">
+        <span class="close-btn" onclick="closeGravityModal()">&times;</span>
+        <h2 style="color: #00d2ff; margin-bottom: 8px;">🪐 Kütleçekim & Yörünge Laboratuvarı</h2>
+        <p style="color: #a0a0c0; font-size: 0.85rem; margin-bottom: 15px;">
+            Fareyle tıklayıp sürükleyerek gezegen fırlatın! Hız ve yön oku görünecektir. 
+        </p>
+
+        <!-- Kontrol Butonları -->
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; align-items: center;">
+            <button class="cat-btn active" id="modePlanetBtn" onclick="setGravitySpawnMode('planet')">🪐 Gezegen Fırlat</button>
+            <button class="cat-btn" id="modeStarBtn" onclick="setGravitySpawnMode('star')">☀️ Yıldız Koy</button>
+            <button class="cat-btn" id="modeBlackHoleBtn" onclick="setGravitySpawnMode('blackhole')">🕳️ Karadelik Koy</button>
+            <button class="cat-btn" onclick="loadSolarSystemPreset()" style="background: rgba(0, 210, 255, 0.2); border-color: #00d2ff;">🌌 Güneş Sistemi Yükle</button>
+            <button class="cat-btn" onclick="clearGravitySim()">🗑️ Temizle</button>
+            <button class="cat-btn" id="pauseGravityBtn" onclick="toggleGravityPause()">⏸️ Duraklat</button>
+        </div>
+
+        <!-- Canvas Ekranı -->
+        <div style="position: relative; width: 100%; height: 500px; background: #020208; border-radius: 10px; border: 1px solid rgba(0, 210, 255, 0.3); overflow: hidden;">
+            <canvas id="gravityCanvas" style="width: 100%; height: 100%; display: block; cursor: crosshair;"></canvas>
+            
+            <div id="gravityInfoOverlay" style="position: absolute; bottom: 10px; left: 10px; color: #a0a0c0; font-size: 0.8rem; pointer-events: none; background: rgba(0,0,0,0.7); padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);">
+                Gök Cismi Sayısı: <b id="bodyCountText" style="color:#00d2ff;">0</b> | Mod: <b id="currentModeText" style="color:#a855f7;">Gezegen</b>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Veri Tabanı ve JS Dosyaları (Sıralama Önemli) -->
     <script src="topicsData.js"></script>
     <script src="script.js"></script>
 </body>

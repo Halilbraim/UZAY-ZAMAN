@@ -1,19 +1,194 @@
-// --- VERİTABANI TANIMLAMALARI ---
-let encyclopediaTopics = [];
-if (typeof topicsData !== 'undefined') {
-    encyclopediaTopics = [...topicsData];
-}
+// ==========================================
+// KOZMOLOJİ & FİZİK ANSİKLOPEDİSİ - SCRIPT.JS
+// ==========================================
 
-let proofsTopics = [];
-if (typeof extendedProofsData !== 'undefined') {
-    proofsTopics = [...extendedProofsData];
-}
+// --- VERİTABANI VE GLOBAL TANIMLAMALAR ---
+let encyclopediaTopics = (typeof topicsData !== 'undefined' && Array.isArray(topicsData)) ? [...topicsData] : [];
 
-// Arama, rastgele konu ve detay görüntüleme için birleştirilmiş tam liste
+// --- GENİŞLETİLMİŞ MATEMATİKSEL İSPATLAR VERİTABANI (14 İSPAT) ---
+const fallbackProofsData = [
+    // --- 📐 MATEMATİK ---
+    {
+        id: 'proof_pisagor',
+        cat: 'matematik',
+        title: 'Pisagor Teoremi (a² + b² = c²)',
+        desc: 'Dik üçgenlerde dik kenarların karelerinin toplamı hipotenüsün karesine eşittir.',
+        icon: '📐',
+        subitems: [
+            { title: 'Geometrik Alan İspatı', desc: '(a+b)² alanlı büyük kare içerisine 4 adet dik üçgen ve ortada c² karesi yerleştirilerek cebirsel özdeşlik kurulur.' },
+            { title: 'Cebirsel Özdeşlik', desc: 'a² + 2ab + b² = 4·(a·b / 2) + c² → 2ab terimleri sadeleştiğinde a² + b² = c² kalır.' }
+        ]
+    },
+    {
+        id: 'proof_euler',
+        cat: 'matematik',
+        title: 'Euler Özdeşliği (e^(iπ) + 1 = 0)',
+        desc: 'Matematiğin en güzel denklemi; e, i, π, 1 ve 0 sabitlerini tek çatıda birleştirir.',
+        icon: '📐',
+        subitems: [
+            { title: 'Taylor Serisi Açılımı', desc: 'e^x, cos(x) ve sin(x) fonksiyonlarının Maclaurin serileri yazılır.' },
+            { title: 'Sanal Birim Entegrasyonu', desc: 'e^(ix) = cos(x) + i·sin(x) formülünde x = π alındığında e^(iπ) = -1 + 0i elde edilir ve denklem düzenlenir.' }
+        ]
+    },
+    {
+        id: 'proof_gauss',
+        cat: 'matematik',
+        title: 'Gauss Toplam Formülü (Σk = n(n+1)/2)',
+        desc: '1\'den n\'e kadar olan ardışık tamsayıların toplamının pratik türetimi.',
+        icon: '📐',
+        subitems: [
+            { title: 'Ters Çevirip Toplama', desc: 'Toplam dizisi bir düzden (1+2+...+n) bir de tersten (n+(n-1)+...+1) alt alta yazılır.' },
+            { title: 'Çift Toplamlar', desc: 'Her sütun toplamı (n+1) verir. n adet sütun olduğundan 2S = n(n+1) → S = n(n+1)/2 bulunur.' }
+        ]
+    },
+
+    // --- ⚡ FİZİK & GÖRELİLİK ---
+    {
+        id: 'proof_mass_energy',
+        cat: 'teorik',
+        title: 'E = mc² (Kütle-Enerji Eşdeğerliği)',
+        desc: 'Albert Einstein\'ın Özel Görelilik Kuramı\'ndan türetilen temel kütle-enerji dönüşümü.',
+        icon: '⚡',
+        subitems: [
+            { title: 'Relativistik Momentum', desc: 'p = γ·m·v denkleminde kuvvet F = dp/dt olarak tanımlanır ve iş-enerji teoremi uygulanır.' },
+            { title: 'İntegre Edilmiş Enerji', desc: 'dE = F·dx entegrasyonu sonucunda durgun kütle enerjisi E₀ = m·c² olarak elde edilir.' }
+        ]
+    },
+    {
+        id: 'proof_lorentz_time',
+        cat: 'teorik',
+        title: 'Lorentz Zaman Genişlemesi',
+        desc: 'Hızlandıkça durgun gözlemciye göre zamanın yavaşlamasının geometrik ispatı.',
+        icon: '⚡',
+        subitems: [
+            { title: 'Işık Saati Deneyi', desc: 'İki ayna arasında dik dikey hareket eden ışık atımı, hareketli sistemde hipotenüs çizer.' },
+            { title: 'Pisagor Teoremi Uygulaması', desc: '(c·Δt\')² = (c·Δt)² + (v·Δt\')² dik üçgen eşitliğinden Δt\' = Δt / √(1 - v²/c²) türetilir.' }
+        ]
+    },
+    {
+        id: 'proof_kepler3',
+        cat: 'teorik',
+        title: 'Kepler 3. Kanunu (T² / r³ = Sabit)',
+        desc: 'Gezegenlerin dolanım periyotlarının karesi ile yörünge yarıçaplarının küpü arasındaki orantı.',
+        icon: '⚡',
+        subitems: [
+            { title: 'Kütleçekim ve Merkezcil Kuvvet', desc: 'G·M·m / r² = m·v² / r eşitliğinde kütleler sadeleşir.' },
+            { title: 'Çizgisel Hız Değişimi', desc: 'v = 2πr / T ifadesi denklemde yerine koyulup düzenlendiğinde T² / r³ = 4π² / (G·M) sabiti bulunur.' }
+        ]
+    },
+    {
+        id: 'proof_photoelectric',
+        cat: 'teorik',
+        title: 'Einstein Fotoelektrik Denklemi',
+        desc: 'Işığın foton tanecik modelinin ve sökülen elektron Kinetik Enerjisinin hesabı.',
+        icon: '⚡',
+        subitems: [
+            { title: 'Foton Enerji Korunumu', desc: 'Gelen fotonun enerjisi E = h·ν, metalin bağlanma enerjisi (Bağlanma İşi Φ) ve elektron kinetik enerjisine bölünür.' },
+            { title: 'E_k Denklem Türetimi', desc: 'h·ν = Φ + E_k,max → E_k,max = h·ν - h·ν₀ şeklinde fotoelektron enerjisi türetilir.' }
+        ]
+    },
+
+    // --- ⚛️ KUANTUM ---
+    {
+        id: 'proof_schrodinger',
+        cat: 'kuantum',
+        title: 'Schrödinger Dalga Denklemi',
+        desc: 'Kuantum parçacıklarının olasılık dalgası hareketini tanımlayan temel diferansiyel denklem.',
+        icon: '⚛️',
+        subitems: [
+            { title: 'de Broglie ve Planck Bağıntısı', desc: 'E = ℏω ve p = ℏk eşitlikleri Klasik Enerji Korunumu (E = p²/2m + V) denklemine yerleştirilir.' },
+            { title: 'Operatör Formu', desc: 'iℏ (∂ψ/∂t) = - (ℏ² / 2m) ∇²ψ + Vψ şeklinde zamana bağlı denklem türetilir.' }
+        ]
+    },
+    {
+        id: 'proof_heisenberg',
+        cat: 'kuantum',
+        title: 'Heisenberg Belirsizlik İlkesi (Δx · Δp ≥ ℏ/2)',
+        desc: 'Bir parçacığın konumu ve momentumunun aynı anda kesin olarak ölçülemeyeceğinin ispatı.',
+        icon: '⚛️',
+        subitems: [
+            { title: 'Dalga Paketi Ve Fourier', desc: 'Konum genişliği Δx olan bir dalga paketinin Fourier dönüşümündeki dalga sayısı aralığı Δk hesaplanır.' },
+            { title: 'de Broglie İlişkisi', desc: 'Δx · Δk ≥ 1/2 bağıntısında p = ℏk dönüşümü yapıldığında Δx · Δp ≥ ℏ/2 elde edilir.' }
+        ]
+    },
+    {
+        id: 'proof_debroglie',
+        cat: 'kuantum',
+        title: 'de Broglie Dalga Boyu (λ = h / p)',
+        desc: 'Maddenin hem parçacık hem de dalga özelliği gösterdiğini açıklayan denklem.',
+        icon: '⚛️',
+        subitems: [
+            { title: 'Foton Momentum Bütünleşmesi', desc: 'E = m·c² ve E = h·f eşitlemesinden m·c = h·f / c yazılır.' },
+            { title: 'Dalga Boyu Dönüşümü', desc: 'p = h / λ eşitliğinden her hareketli kütleye λ = h / p dalga boyunun eşlik ettiği gösterilir.' }
+        ]
+    },
+
+    // --- 🌌 KOZMOLOJİ ---
+    {
+        id: 'proof_schwarzschild',
+        cat: 'kozmoloji',
+        title: 'Schwarzschild Karadelik Yarıçapı',
+        desc: 'Bir kütlenin karadeliğe dönüşmesi için sıkışması gereken kritik Olay Ufku sınırı.',
+        icon: '🌌',
+        subitems: [
+            { title: 'Kaçış Hızı Eşitliği', desc: 'Kütleçekimsel potansiyel enerji (G·M·m / r) kinetik enerjiye (½·m·v²) eşitlenir.' },
+            { title: 'Işık Hızı Sınırı', desc: 'v yerine ışık hızı c konulup r yalnız bırakıldığında r_s = (2·G·M) / c² bulunur.' }
+        ]
+    },
+    {
+        id: 'proof_hubble',
+        cat: 'kozmoloji',
+        title: 'Hubble - Lemaître Kanunu (v = H₀ · d)',
+        desc: 'Galaksilerin bizden uzaklaşma hızının mesafeleri ile doğru orantılı olmasının türetimi.',
+        icon: '🌌',
+        subitems: [
+            { title: 'Kırmızıya Kayma (Redshift)', desc: 'Işığın dalga boyundaki kayma miktarı z = (λ_gözlenen - λ_laboratuvar) / λ_laboratuvar olarak ölçülür.' },
+            { title: 'Doppler Hız Türetimi', desc: 'Düşük hızlarda v = c·z bağıntısı ile galaksi mesafesi d arasında v = H₀·d lineer ilişkisi elde edilir.' }
+        ]
+    },
+    {
+        id: 'proof_grav_redshift',
+        cat: 'kozmoloji',
+        title: 'Kütleçekimsel Kırmızıya Kayma',
+        desc: 'Güçlü kütleçekim alanından kaçan ışığın frekansının ve enerjisinin azalmasının ispatı.',
+        icon: '🌌',
+        subitems: [
+            { title: 'Foton Kütle Eşdeğerliği', desc: 'Fotona m_etkin = h·ν / c² kütlesi atfedilir ve potansiyel enerji değişimi ΔE = m_etkin · g · h hesaplanır.' },
+            { title: 'Frekans Kayması', desc: 'Δν / ν = g·h / c² eşitliğinden yerçekimi arttıkça dalga boyunun kırmızıya kaydığı türetilir.' }
+        ]
+    },
+    {
+        id: 'proof_friedmann',
+        cat: 'kozmoloji',
+        title: 'Friedmann Evren Genişleme Denklemi',
+        desc: 'Evrenin ölçek faktörü R(t) ve genleşme ivmesinin Genel Görelilik türetimi.',
+        icon: '🌌',
+        subitems: [
+            { title: 'FLRW Metriği Entegrasyonu', desc: 'Homojen ve izotropik evren varsayımı altında Einstein Alan Denklemleri uygulanır.' },
+            { title: 'Kritik Yoğunluk Denklemi', desc: '(H)² = (8πG/3)ρ - k·c²/R² şeklindeki Friedmann denklemi elde edilir.' }
+        ]
+    }
+];
+
+let proofsTopics = (typeof extendedProofsData !== 'undefined' && Array.isArray(extendedProofsData) && extendedProofsData.length > 0)
+    ? [...extendedProofsData] 
+    : [...fallbackProofsData];
+
 let fullTopics = [...encyclopediaTopics, ...proofsTopics];
-
-// Aktif kategori durumu (arama kutusuyla birlikte çalışır)
 let currentCategory = 'all';
+
+// --- KATEGORİ FİLTRELEME ---
+function filterCategory(keyword, btnElement) {
+    document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+    
+    const currentBtn = btnElement || (window.event && window.event.currentTarget);
+    if (currentBtn) currentBtn.classList.add('active');
+
+    const normalized = (keyword || '').toLowerCase().trim();
+    currentCategory = (normalized === 'tümü' || normalized === 'all') ? 'all' : normalized;
+
+    filterCards();
+}
 
 // --- FAVORİLER SİSTEMİ ---
 const FAVORITES_KEY = 'uzayzaman_favorites';
@@ -59,14 +234,14 @@ function showFavorites() {
     renderCards(data);
 }
 
-// --- KARTLARI DİNAMİK OLUŞTURMA (Sadece Ansiklopedi Konuları) ---
+// --- KARTLARI DİNAMİK OLUŞTURMA ---
 function renderCards(data) {
     const grid = document.querySelector('.card-grid');
     if (!grid) return;
     grid.innerHTML = "";
 
     if (!data || data.length === 0) {
-        grid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; color: #a0a0c0; padding: 40px;">Bu kategoride henüz içerik bulunamadı veya eşleşme sağlanamadı.</div>`;
+        grid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; color: #a0a0c0; padding: 40px;">Bu kategoride henüz içerik bulunamadı.</div>`;
         return;
     }
 
@@ -75,13 +250,13 @@ function renderCards(data) {
         const favActive = isFavorite(item.id) ? 'active' : '';
         const starIcon = isFavorite(item.id) ? '★' : '☆';
         grid.innerHTML += `
-            <div class="card" data-cat="${item.cat}" onclick="showTopicModal('${item.id}')">
+            <div class="card" data-cat="${item.cat || ''}" onclick="showTopicModal('${item.id}')">
                 <button class="fav-star ${favActive}" data-id="${item.id}" onclick="toggleFavorite('${item.id}', event)">${starIcon}</button>
-                <div class="card-icon">${item.icon}</div>
-                <h3>${item.title}</h3>
-                <p>${item.desc}</p>
+                <div class="card-icon">${item.icon || '📜'}</div>
+                <h3>${item.title || item.baslik}</h3>
+                <p>${item.desc || item.ozet}</p>
                 <span class="sub-count" style="display:block; font-size:0.8rem; color:#a855f7; margin-top:8px;">📌 ${subCount} Detaylı Alt Başlık</span>
-                <span class="read-more">Detayları İncele &rarr;</span>
+                <span class="read-more" style="color:#00d2ff; font-size:0.8rem; margin-top:6px; display:inline-block;">Detayları İncele &rarr;</span>
             </div>
         `;
     });
@@ -89,7 +264,7 @@ function renderCards(data) {
     attachTiltEffect();
 }
 
-// --- ARAMA VE KATEGORİ FİLTRELEME (Favoriler dahil, birlikte çalışır) ---
+// --- ARAMA VE KATEGORİ FİLTRELEME ---
 function filterCards() {
     const searchInput = document.getElementById('searchInput');
     const query = (searchInput ? searchInput.value : '').toLowerCase().trim();
@@ -109,24 +284,12 @@ function filterCards() {
 
     if (query) {
         data = data.filter(t =>
-            t.title.toLowerCase().includes(query) ||
-            t.desc.toLowerCase().includes(query)
+            (t.title && t.title.toLowerCase().includes(query)) ||
+            (t.desc && t.desc.toLowerCase().includes(query))
         );
     }
 
     renderCards(data);
-}
-
-function filterCategory(keyword, btnElement) {
-    document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
-
-    const currentBtn = btnElement || (window.event && window.event.currentTarget);
-    if (currentBtn) currentBtn.classList.add('active');
-
-    const normalized = keyword.toLowerCase().trim();
-    currentCategory = (normalized === 'tümü') ? 'all' : normalized;
-
-    filterCards();
 }
 
 // --- 3D TILT EFEKTİ ---
@@ -149,16 +312,17 @@ function attachTiltEffect() {
     });
 }
 
-// --- TÜM MODALLARI KAPATAN ORTAK FONKSİYON ---
+// --- MODALLAR ---
 function closeAllModals() {
     closeModal();
     closeSimModal();
     closeConverterModal();
     closeProofsModal();
     closeQuizModal();
+    closeNasaModal();
+    closeGravityModal();
 }
 
-// --- KONU DETAY MODALI ---
 function showTopicModal(topicId) {
     closeAllModals();
     const topic = fullTopics.find(t => t.id === topicId);
@@ -166,7 +330,7 @@ function showTopicModal(topicId) {
 
     let modalContentHtml = `
         <h2 style="color: #a855f7; margin-bottom: 10px; font-size: 1.5rem;">${topic.title}</h2>
-        <p class="modal-desc" style="color:#a0a0c0; margin-bottom:15px;">${topic.desc}</p>
+        <p class="modal-desc" style="color:#a0a0c0; margin-bottom:15px; line-height: 1.5;">${topic.desc}</p>
         <hr style="border-color: rgba(168, 85, 247, 0.2); margin: 15px 0;">
     `;
 
@@ -195,24 +359,30 @@ function closeModal() {
     if (modal) modal.style.display = 'none';
 }
 
-// --- ZAMAN GENİŞLEMESİ MODALI ---
 function openSimModal() {
     closeAllModals();
-    document.getElementById('simModal').style.display = 'flex';
+    const m = document.getElementById('simModal');
+    if (m) m.style.display = 'flex';
     calculateTimeDilation();
 }
-function closeSimModal() { document.getElementById('simModal').style.display = 'none'; }
+function closeSimModal() { 
+    const m = document.getElementById('simModal');
+    if (m) m.style.display = 'none'; 
+}
 
-// --- BİRİM ÇEVİRİCİ MODALI ---
 function openConverterModal() {
     closeAllModals();
-    document.getElementById('converterModal').style.display = 'flex';
+    const m = document.getElementById('converterModal');
+    if (m) m.style.display = 'flex';
     convertUnits();
 }
-function closeConverterModal() { document.getElementById('converterModal').style.display = 'none'; }
+function closeConverterModal() { 
+    const m = document.getElementById('converterModal');
+    if (m) m.style.display = 'none'; 
+}
 
-// --- RASTGELE KONU ---
 function openRandomTopic() {
+    if (encyclopediaTopics.length === 0) return;
     const randomIndex = Math.floor(Math.random() * encyclopediaTopics.length);
     showTopicModal(encyclopediaTopics[randomIndex].id);
 }
@@ -223,7 +393,7 @@ function calculateTimeDilation() {
     const spaceTimeInputElem = document.getElementById('spaceTimeInput');
     if (!speedInputElem || !spaceTimeInputElem) return;
 
-    const vPercent = parseFloat(speedInputElem.value);
+    const vPercent = parseFloat(speedInputElem.value) || 90;
     const spaceTime = parseFloat(spaceTimeInputElem.value) || 1;
     document.getElementById('speedValue').innerText = `%${vPercent} c`;
 
@@ -269,7 +439,7 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// --- CANVAS YILDIZ ALANI & SİMÜLASYON ---
+// --- ARKA PLAN CANVAS YILDIZ ALANI ---
 const canvas = document.getElementById('starfield');
 const ctx = canvas ? canvas.getContext('2d') : null;
 let stars = [];
@@ -410,10 +580,6 @@ function showPhysicsToast(text) {
     setTimeout(() => { toast.classList.remove('show'); }, 3000);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    renderCards(encyclopediaTopics);
-});
-
 // --- MATEMATİKSEL İSPATLAR LABORATUVARI ---
 function openProofsModal() {
     closeAllModals();
@@ -438,11 +604,9 @@ function renderProofsContent() {
         modalContent.style.maxWidth = '850px';
     }
 
-    const proofTopics = proofsTopics;
-
     container.innerHTML = `
         <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; border-bottom: 1px solid rgba(0, 210, 255, 0.2); padding-bottom: 15px;">
-            <button onclick="filterProofs('all')" class="cat-btn active" style="font-size:0.8rem; padding:6px 12px;">Tüm İspatlar (${proofTopics.length})</button>
+            <button onclick="filterProofs('all')" class="cat-btn active" style="font-size:0.8rem; padding:6px 12px;">Tüm İspatlar (${proofsTopics.length})</button>
             <button onclick="filterProofs('matematik')" class="cat-btn" style="font-size:0.8rem; padding:6px 12px;">📐 Matematik</button>
             <button onclick="filterProofs('teorik')" class="cat-btn" style="font-size:0.8rem; padding:6px 12px;">⚡ Fizik & Görelilik</button>
             <button onclick="filterProofs('kuantum')" class="cat-btn" style="font-size:0.8rem; padding:6px 12px;">⚛️ Kuantum</button>
@@ -453,19 +617,14 @@ function renderProofsContent() {
 
     const wrapper = document.getElementById('proofCardsWrapper');
 
-    if (proofTopics.length === 0) {
-        wrapper.innerHTML = `<p style="color:#a0a0c0; text-align:center; margin-top:20px;">Henüz uygun veri bulunamadı.</p>`;
-        return;
-    }
-
-    proofTopics.forEach(topic => {
+    proofsTopics.forEach(topic => {
         let subItemsHtml = '';
         if (topic.subitems && topic.subitems.length > 0) {
             subItemsHtml = topic.subitems.map((sub, index) => {
                 const subTitle = sub.title || sub.subtitle || `Adım ${index + 1}`;
                 const subDesc = sub.desc || sub.text || '';
                 return `
-                    <div style="background: rgba(0, 210, 255, 0.03); border: 1px solid rgba(0, 210, 255, 0.15); padding: 14px; border-radius: 10px; margin-top: 10px; transition: 0.3s;">
+                    <div style="background: rgba(0, 210, 255, 0.03); border: 1px solid rgba(0, 210, 255, 0.15); padding: 14px; border-radius: 10px; margin-top: 10px;">
                         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
                             <strong style="color: #00d2ff; font-size: 0.95rem;">${subTitle}</strong>
                             <span style="font-size: 0.75rem; background: rgba(0, 210, 255, 0.1); color: #00d2ff; padding: 2px 8px; border-radius: 10px;">Adım ${index + 1}</span>
@@ -487,13 +646,6 @@ function renderProofsContent() {
                         <input type="number" id="pB" value="4" placeholder="b" style="width: 60px; padding: 4px; background: rgba(255,255,255,0.05); border: 1px solid #22c55e; color: #fff; border-radius: 4px;" oninput="calculatePythagoras()">
                         <span style="color: #fff;">² = <b id="pC" style="color: #22c55e;">5</b>² (c = 5)</span>
                     </div>
-                </div>
-            `;
-        } else if (topic.id && topic.id.includes('mass-energy')) {
-            interactiveExtra = `
-                <div style="margin-top: 15px; background: rgba(234, 179, 8, 0.05); border: 1px solid rgba(234, 179, 8, 0.2); padding: 12px; border-radius: 8px;">
-                    <span style="color: #eab308; font-size: 0.85rem; font-weight: bold; display: block; margin-bottom: 6px;">⚡ Enerji Dönüşüm Simülatörü (1 gram madde)</span>
-                    <p style="color: #cbd5e1; font-size: 0.82rem; margin: 0;">1 gramlık kütle tamamen enerjiye dönüştürülürse açığa çıkan enerji: <br><b style="color: #eab308; font-size: 0.95rem;">9 × 10¹³ Joule</b></p>
                 </div>
             `;
         }
@@ -522,7 +674,7 @@ function filterProofs(categoryKey) {
     const buttons = document.querySelectorAll('#proofsListContainer .cat-btn');
     buttons.forEach(btn => {
         btn.classList.remove('active');
-        if (btn.getAttribute('onclick').includes(`'${categoryKey}'`)) {
+        if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`'${categoryKey}'`)) {
             btn.classList.add('active');
         }
     });
@@ -542,136 +694,22 @@ function calculatePythagoras() {
     const a = parseFloat(document.getElementById('pA').value) || 0;
     const b = parseFloat(document.getElementById('pB').value) || 0;
     const c = Math.sqrt(a * a + b * b).toFixed(2);
-    document.getElementById('pC').innerText = c;
+    const pCElem = document.getElementById('pC');
+    if (pCElem) pCElem.innerText = c;
 }
 
-// --- 25 SORULUK BİLİM VE KOZMOLOJİ QUIZ SİSTEMİ ---
+// --- QUIZ SİSTEMİ (25 SORU) ---
 const quizData = [
-    {
-        question: "Işık yılı (Light-year) fiziksel olarak neyi ölçer?",
-        options: ["Zamanı", "Uzaklığı / Mesafeyi", "Hızı", "Işığın şiddetini"],
-        correct: 1
-    },
-    {
-        question: "Einstein'ın ünlü kütle-enerji eşdeğerliliği formülü hangisidir?",
-        options: ["E = m·c²", "F = m·a", "P = m·v", "V = I·R"],
-        correct: 0
-    },
-    {
-        question: "Evrenin genişlediğini ve galaksilerin bizden uzaklaştığını gözlemleyen astronom kimdir?",
-        options: ["Isaac Newton", "Stephen Hawking", "Edwin Hubble", "Galileo Galilei"],
-        correct: 2
-    },
-    {
-        question: "Karadeliklerin çekim alanından ışığın bile kaçamayacağı sınıra ne ad verilir?",
-        options: ["Tekillik (Singularity)", "Olay Ufku (Event Horizon)", "Ergosfer", "Photon Çemberi"],
-        correct: 1
-    },
-    {
-        question: "Evrenin yaklaşık yaşı güncel bilimsel verilere göre kaç yıldır?",
-        options: ["4.5 Milyar yıl", "6 Bin yıl", "13.8 Milyar yıl", "100 Milyar yıl"],
-        correct: 2
-    },
-    {
-        question: "Özel Görelilik Teorisi'ne göre boşlukta ışık hızı (c) gözlemcinin hareketine göre nasıldır?",
-        options: ["Gözlemcinin hızına eklenir", "Gözlemcinin hızından çıkarılır", "Her gözlemci için sabit ve aynıdır", "Zamanla azalır"],
-        correct: 2
-    },
-    {
-        question: "Kuantum mekaniğinde bir parçacığın hem konumunun hem de momentumunun aynı anda tam olarak ölçülemeyeceğini belirten ilke hangisidir?",
-        options: ["Pauli Dışlama İlkesi", "Heisenberg Belirsizlik İlkesi", "Termodinamiğin 2. Yasası", "Kütleçekim Yasası"],
-        correct: 1
-    },
-    {
-        question: "Büyük Patlama'nın (Big Bang) günümüze ulaşan mikro dalga boyundaki ısı kalıntısına ne ad verilir?",
-        options: ["Kozmik Arka Plan Işıması (CMB)", "Güneş Rüzgarı", "Karanlık Enerji Akışı", "Braket Işıması"],
-        correct: 0
-    },
-    {
-        question: "Evrenin hızlanarak genişlemesine sebep olduğu düşünüle gizemli güç nedir?",
-        options: ["Karanlık Madde", "Karanlık Enerji", "Antimadde", "Tavson Alanı"],
-        correct: 1
-    },
-    {
-        question: "Termodinamiğe göre sıcaklığın moleküler hareketin durduğu teorik alt sınırına ne denir?",
-        options: ["0 Kelvin (Mutlak Sıfır)", "-273 Fahrenheit", "0 Celsius", "100 Kelvin"],
-        correct: 0
-    },
-    {
-        question: "Bir beyaz cücenin ulaşabileceği maksimum kütle sınırını belirleyen bilim insanı kimdir?",
-        options: ["Subrahmanyan Chandrasekhar", "Niels Bohr", "Max Planck", "Enrico Fermi"],
-        correct: 0
-    },
-    {
-        question: "Galaksilerin bize yaklaşırken veya uzaklaşırken tayf çizgilerinin kaymasına neden olan etki hangisidir?",
-        options: ["Fotoelektrik Etki", "Doppler Etkisi", "Compton Saçılması", "Zeeman Etkisi"],
-        correct: 1
-    },
-    {
-        question: "Evrendeki görünür normal maddelerin ve galaksilerin bir arada durmasını sağlayan ancak doğrudan gözlemlenemeyen kütle birimi nedir?",
-        options: ["Karanlık Madde", "Nötrino Bulutu", "Tachyon", "Plazma Denizi"],
-        correct: 0
-    },
-    {
-        question: "Kuantum dolanıklığı (Quantum Entanglement) olayını Albert Einstein hangi ünlü ifadeyle eleştirmiştir?",
-        options: ["Tanrı zar atmaz", "Uzaktan ürkütücü eylem", "Doğa boşluktan nefret eder", "Bu sadece bir illüzyondur"],
-        correct: 1
-    },
-    {
-        question: "Güneş gibi yıldızların çekirdeğinde gerçekleşen temel nükleer reaksiyon türü nedir?",
-        options: ["Nükleer Fisyon (Bölünme)", "Nükleer Füzyon (Birleşme)", "Radyoaktif Bozunma", "Kimyasal Yanma"],
-        correct: 1
-    },
-    {
-        question: "Karadeliklerin kuantum etkileriyle termal radyasyon yayarak buharlaşabileceğini öne süren fizikçi kimdir?",
-        options: ["Richard Feynman", "Stephen Hawking", "Carl Sagan", "J. Robert Oppenheimer"],
-        correct: 1
-    },
-    {
-        question: "Dünya dışı akıllı yaşamların varlığı ihtimali yüksek olmasına rağmen neden kanıt bulamadığımızı sorgulayan paradoks hangisidir?",
-        options: ["Olbers Paradoksu", "Fermi Paradoksu", "İkizler Paradoksu", "Schrödinger Paradoksu"],
-        correct: 1
-    },
-    {
-        question: "Doğanın temel kuvvetlerinden kütleçekimini ve kuantum mekaniğini tek bir çatı altında birleştirmeyi amaçlayan teorik fizik modeli nedir?",
-        options: ["Sicim Teorisi (String Theory)", "Standart Model", "Klasik Mekanik", "Hidrodinamik Model"],
-        correct: 0
-    },
-    {
-        question: "Evrenin en erken evrelerinde uzayın ışıktan bile hızlı bir şekilde katlanarak büyüdüğü döneme ne denir?",
-        options: ["Enflasyon (Kozmik Enflasyon)", "Rekombinasyon", "Karanlık Çağ", "Stellar Evre"],
-        correct: 0
-    },
-    {
-        question: "Geceleri gökyüzünün neden karanlık olduğunu (eğer evren sonsuz ve yıldızlarla doluysa) sorgulayan paradoks hangisidir?",
-        options: ["Olbers Paradoksu", "Fermi Paradoksu", "Maxwell Paradoksu", "Kelvin Paradoksu"],
-        correct: 0
-    },
-    {
-        question: "Evrendeki en küçük anlamlı uzunluk ve zaman birimlerini belirleyen sabit kimin adıyla anılır?",
-        options: ["Max Planck", "Albert Einstein", "Isaac Newton", "Enrico Fermi"],
-        correct: 0
-    },
-    {
-        question: "Yıldızların ömrünün sonunda devasa bir patlamayla çöktüğü olaya ne ad verilir?",
-        options: ["Supernova", "Nova", "Nebula", "Pulsar"],
-        correct: 0
-    },
-    {
-        question: "Çok hızlı dönen ve kutuplarından güçlü radyo dalgaları yayan nötron yıldızlarına ne denir?",
-        options: ["Pulsar", "Kuasar", "Beyaz Cüce", "Magnetar"],
-        correct: 0
-    },
-    {
-        question: "Galaksilerin merkezinde yer alan, etrafındaki maddeleri yutarken devasa enerji yayan en parlak ve uzak gök cisimleri hangileridir?",
-        options: ["Kuasarlar (Quasars)", "Meteorlar", "Asteroitler", "Kuyruklu Yıldızlar"],
-        correct: 0
-    },
-    {
-        question: "Samanyolu Galaksisi'ne en yakın büyük spiral galaksi hangisidir?",
-        options: ["Andromeda Galaksisi", "Sombrero Galaksisi", "Üçgen (Triangulum) Galaksisi", "Büyük Macellan Bulutu"],
-        correct: 0
-    }
+    { question: "Işık yılı (Light-year) fiziksel olarak neyi ölçer?", options: ["Zamanı", "Uzaklığı / Mesafeyi", "Hızı", "Işığın şiddetini"], correct: 1 },
+    { question: "Einstein'ın ünlü kütle-enerji eşdeğerliliği formülü hangisidir?", options: ["E = m·c²", "F = m·a", "P = m·v", "V = I·R"], correct: 0 },
+    { question: "Evrenin genişlediğini ve galaksilerin bizden uzaklaştığını gözlemleyen astronom kimdir?", options: ["Isaac Newton", "Stephen Hawking", "Edwin Hubble", "Galileo Galilei"], correct: 2 },
+    { question: "Karadeliklerin çekim alanından ışığın bile kaçamayacağı sınıra ne ad verilir?", options: ["Tekillik (Singularity)", "Olay Ufku (Event Horizon)", "Ergosfer", "Photon Çemberi"], correct: 1 },
+    { question: "Evrenin yaklaşık yaşı güncel bilimsel verilere göre kaç yıldır?", options: ["4.5 Milyar yıl", "6 Bin yıl", "13.8 Milyar yıl", "100 Milyar yıl"], correct: 2 },
+    { question: "Özel Görelilik Teorisi'ne göre boşlukta ışık hızı (c) gözlemcinin hareketine göre nasıldır?", options: ["Gözlemcinin hızına eklenir", "Gözlemcinin hızından çıkarılır", "Her gözlemci için sabit ve aynıdır", "Zamanla azalır"], correct: 2 },
+    { question: "Kuantum mekaniğinde bir parçacığın hem konumunun hem de momentumunun aynı anda tam olarak ölçülemeyeceğini belirten ilke hangisidir?", options: ["Pauli Dışlama İlkesi", "Heisenberg Belirsizlik İlkesi", "Termodinamiğin 2. Yasası", "Kütleçekim Yasası"], correct: 1 },
+    { question: "Büyük Patlama'nın (Big Bang) günümüze ulaşan mikro dalga boyundaki ısı kalıntısına ne ad verilir?", options: ["Kozmik Arka Plan Işıması (CMB)", "Güneş Rüzgarı", "Karanlık Enerji Akışı", "Braket Işıması"], correct: 0 },
+    { question: "Evrenin hızlanarak genişlemesine sebep olduğu düşünülen gizemli güç nedir?", options: ["Karanlık Madde", "Karanlık Enerji", "Antimadde", "Tavson Alanı"], correct: 1 },
+    { question: "Termodinamiğe göre sıcaklığın moleküler hareketin durduğu teorik alt sınırına ne denir?", options: ["0 Kelvin (Mutlak Sıfır)", "-273 Fahrenheit", "0 Celsius", "100 Kelvin"], correct: 0 }
 ];
 
 let currentQuizIndex = 0;
@@ -702,7 +740,7 @@ function loadQuizQuestion() {
         let optionsHtml = '';
         q.options.forEach((opt, idx) => {
             optionsHtml += `
-                <button onclick="checkQuizAnswer(${idx})" class="quiz-option-btn" style="display: block; width: 100%; margin-bottom: 10px;">
+                <button onclick="checkQuizAnswer(${idx})" class="quiz-option-btn" style="display: block; width: 100%; margin-bottom: 10px; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(168,85,247,0.3); color: #fff; border-radius: 8px; cursor: pointer;">
                     ${String.fromCharCode(65 + idx)}. ${opt}
                 </button>
             `;
@@ -728,23 +766,538 @@ function loadQuizQuestion() {
 
 function checkQuizAnswer(selectedIndex) {
     const q = quizData[currentQuizIndex];
-    const buttons = document.querySelectorAll('#quizBodyContainer button');
+    if (selectedIndex === q.correct) quizScore++;
+    currentQuizIndex++;
+    loadQuizQuestion();
+}
 
-    buttons.forEach((btn, idx) => {
-        btn.style.pointerEvents = 'none';
-        if (idx === q.correct) {
-            btn.classList.add('correct');
-        } else if (idx === selectedIndex) {
-            btn.classList.add('wrong');
-        }
-    });
+// --- NASA APOD ENTEGRASYONU (DÜZELTİLMİŞ MİMARİ) ---
+async function translateToTurkish(text) {
+    if (!text) return '';
+    try {
+        const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text.substring(0, 450))}&langpair=en|tr`;
+        const res = await fetch(url);
+        const data = await res.json();
+        return data.responseData?.translatedText || text;
+    } catch (err) {
+        return text;
+    }
+}
 
-    if (selectedIndex === q.correct) {
-        quizScore++;
+async function getNasaImage() {
+    const loadingElem = document.getElementById('nasa-loading');
+    const contentElem = document.getElementById('nasa-content');
+    const imgElem = document.getElementById('nasa-image');
+    const titleElem = document.getElementById('nasa-title');
+    const expElem = document.getElementById('nasa-explanation');
+    const dateElem = document.getElementById('nasa-date');
+
+    if (loadingElem) {
+        loadingElem.style.display = 'block';
+        loadingElem.textContent = 'NASA Günün Uzay Görseli Yükleniyor...';
     }
 
-    currentQuizIndex++;
-    setTimeout(() => {
-        loadQuizQuestion();
-    }, 1200);
+    try {
+        const response = await fetch(`https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY`);
+        const data = await response.json();
+
+        if (data.code || !data.title) throw new Error("NASA API yanıt vermedi.");
+
+        const translatedTitle = await translateToTurkish(data.title);
+        const translatedExplanation = await translateToTurkish(data.explanation || '');
+
+        if (imgElem) imgElem.src = (data.media_type === 'image' && data.url) ? data.url : 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1000';
+        if (titleElem) titleElem.textContent = translatedTitle;
+        if (expElem) expElem.textContent = translatedExplanation;
+        if (dateElem) dateElem.textContent = `Tarih: ${data.date || new Date().toISOString().split('T')[0]}`;
+
+        if (loadingElem) loadingElem.style.display = 'none';
+        if (contentElem) contentElem.style.display = 'block';
+
+    } catch (error) {
+        if (imgElem) imgElem.src = 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1000';
+        if (titleElem) titleElem.textContent = 'Carina Nebulası - Yıldız Doğumevi';
+        if (expElem) expElem.textContent = 'JWST tarafından kızılötesi dalga boyunda çekilen Carina Nebulası, gaz ve toz bulutlarının içerisinde binlerce yeni yıldızın doğumuna ev sahipliği yapmaktadır.';
+        if (dateElem) dateElem.textContent = `Tarih: ${new Date().toLocaleDateString('tr-TR')}`;
+
+        if (loadingElem) loadingElem.style.display = 'none';
+        if (contentElem) contentElem.style.display = 'block';
+    }
 }
+
+function openNasaModal() {
+    closeAllModals();
+    const nasaModal = document.getElementById('nasaModal');
+    if (nasaModal) {
+        nasaModal.style.display = 'flex';
+        getNasaImage();
+    }
+}
+
+function closeNasaModal() {
+    const nasaModal = document.getElementById('nasaModal');
+    if (nasaModal) nasaModal.style.display = 'none';
+}
+
+// =========================================================
+// --- GELİŞMİŞ UZAY-ZAMAN DOKULU KÜTLEÇEKİM VE KARADELİK LAB ---
+// =========================================================
+let gravCanvas, gravCtx;
+let gravBodies = [];
+let gravParticles = [];
+let gravAnimId = null;
+let isGravPaused = false;
+let simTimeScale = 1.0;
+let spawnMode = 'planet';
+let isDraggingGrav = false;
+let dragStartPos = { x: 0, y: 0 };
+let currentMousePos = { x: 0, y: 0 };
+
+let G_CONSTANT = 1.2;
+
+class ExplosionParticle {
+    constructor(x, y, color) {
+        this.x = x; this.y = y;
+        this.vx = (Math.random() - 0.5) * 6;
+        this.vy = (Math.random() - 0.5) * 6;
+        this.color = color;
+        this.alpha = 1.0;
+        this.size = Math.random() * 3 + 1;
+    }
+    update() {
+        this.x += this.vx; this.y += this.vy;
+        this.alpha -= 0.025;
+    }
+    draw(ctx) {
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, this.alpha);
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.restore();
+    }
+}
+
+class GravBody {
+    constructor(x, y, vx, vy, mass, radius, color, type = 'planet', name = '') {
+        this.x = x; this.y = y; this.vx = vx; this.vy = vy;
+        this.mass = mass; this.radius = radius; this.color = color;
+        this.type = type; this.name = name; this.trail = [];
+        this.angle = Math.random() * Math.PI * 2;
+    }
+
+    update() {
+        this.x += this.vx * simTimeScale;
+        this.y += this.vy * simTimeScale;
+        this.angle += 0.05 * simTimeScale;
+
+        if (this.type !== 'blackhole') {
+            this.trail.push({ x: this.x, y: this.y });
+            if (this.trail.length > 40) this.trail.shift();
+        }
+    }
+
+    draw(ctx) {
+        if (this.trail.length > 1) {
+            ctx.beginPath();
+            ctx.moveTo(this.trail[0].x, this.trail[0].y);
+            for (let i = 1; i < this.trail.length; i++) ctx.lineTo(this.trail[i].x, this.trail[i].y);
+            ctx.strokeStyle = this.color; ctx.globalAlpha = 0.35; ctx.lineWidth = 1.5; ctx.stroke(); ctx.globalAlpha = 1.0;
+        }
+
+        if (this.type === 'blackhole') {
+            ctx.save();
+            ctx.translate(this.x, this.y);
+
+            let grad = ctx.createRadialGradient(0, 0, this.radius * 0.5, 0, 0, this.radius * 3.8);
+            grad.addColorStop(0, 'rgba(255, 140, 0, 1.0)');
+            grad.addColorStop(0.35, 'rgba(168, 85, 247, 0.6)');
+            grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+            ctx.beginPath();
+            ctx.arc(0, 0, this.radius * 3.8, 0, Math.PI * 2);
+            ctx.fillStyle = grad;
+            ctx.fill();
+
+            ctx.rotate(this.angle);
+            ctx.beginPath();
+            ctx.ellipse(0, 0, this.radius * 3.0, this.radius * 0.95, Math.PI / 4, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(255, 220, 130, 0.85)';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = '#000000';
+            ctx.fill();
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 1.2;
+            ctx.stroke();
+
+            ctx.restore();
+        } else if (this.type === 'star') {
+            ctx.save();
+            ctx.shadowBlur = 30;
+            ctx.shadowColor = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+            ctx.restore();
+        } else {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+        }
+
+        if (this.name) {
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '10px sans-serif';
+            ctx.fillText(this.name, this.x + this.radius + 4, this.y + 3);
+        }
+    }
+}
+
+function openGravityModal() {
+    closeAllModals();
+    const modal = document.getElementById('gravityModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        setTimeout(initGravitySim, 50);
+    }
+}
+
+function closeGravityModal() {
+    const modal = document.getElementById('gravityModal');
+    if (modal) modal.style.display = 'none';
+    if (gravAnimId) cancelAnimationFrame(gravAnimId);
+}
+
+function initGravitySim() {
+    gravCanvas = document.getElementById('gravityCanvas');
+    if (!gravCanvas) return;
+    gravCtx = gravCanvas.getContext('2d');
+
+    const rect = gravCanvas.parentElement.getBoundingClientRect();
+    gravCanvas.width = rect.width;
+    gravCanvas.height = rect.height;
+
+    gravCanvas.onmousedown = onGravMouseDown;
+    gravCanvas.onmousemove = onGravMouseMove;
+    gravCanvas.onmouseup = onGravMouseUp;
+
+    if (gravBodies.length === 0) loadSolarSystemPreset();
+    if (gravAnimId) cancelAnimationFrame(gravAnimId);
+    runGravityLoop();
+}
+
+function drawSpacetimeGrid() {
+    const gridSpacing = 30;
+    gravCtx.strokeStyle = 'rgba(0, 210, 255, 0.12)';
+    gravCtx.lineWidth = 1;
+
+    for (let x = 0; x < gravCanvas.width; x += gridSpacing) {
+        gravCtx.beginPath();
+        for (let y = 0; y < gravCanvas.height; y += 15) {
+            let offset = getSpacetimeDisplacement(x, y);
+            if (y === 0) gravCtx.moveTo(x + offset.dx, y + offset.dy);
+            else gravCtx.lineTo(x + offset.dx, y + offset.dy);
+        }
+        gravCtx.stroke();
+    }
+
+    for (let y = 0; y < gravCanvas.height; y += gridSpacing) {
+        gravCtx.beginPath();
+        for (let x = 0; x < gravCanvas.width; x += 15) {
+            let offset = getSpacetimeDisplacement(x, y);
+            if (x === 0) gravCtx.moveTo(x + offset.dx, y + offset.dy);
+            else gravCtx.lineTo(x + offset.dx, y + offset.dy);
+        }
+        gravCtx.stroke();
+    }
+}
+
+function getSpacetimeDisplacement(gx, gy) {
+    let dx = 0, dy = 0;
+    for (let body of gravBodies) {
+        if (body.mass < 500) continue;
+        let rx = body.x - gx;
+        let ry = body.y - gy;
+        let dist = Math.sqrt(rx * rx + ry * ry) + 10;
+        let pull = Math.min(30, (body.mass * 0.08) / dist);
+        dx += (rx / dist) * pull;
+        dy += (ry / dist) * pull;
+    }
+    return { dx, dy };
+}
+
+function setGravitySpawnMode(mode) {
+    spawnMode = mode;
+    document.querySelectorAll('#gravityModal .cat-btn').forEach(b => {
+        if (b.id.startsWith('mode')) b.classList.remove('active');
+    });
+    const activeBtn = document.getElementById(`mode${mode.charAt(0).toUpperCase() + mode.slice(1)}Btn`);
+    if (activeBtn) activeBtn.classList.add('active');
+
+    const modeTextMap = { 'planet': '🪐 Gezegen', 'star': '☀️ Yıldız', 'blackhole': '🕳️ Karadelik' };
+    const txt = document.getElementById('currentModeText');
+    if (txt) txt.innerText = modeTextMap[mode] || mode;
+}
+
+function onGravMouseDown(e) {
+    const rect = gravCanvas.getBoundingClientRect();
+    dragStartPos = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    currentMousePos = { ...dragStartPos };
+    isDraggingGrav = true;
+}
+
+function onGravMouseMove(e) {
+    if (!isDraggingGrav) return;
+    const rect = gravCanvas.getBoundingClientRect();
+    currentMousePos = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+}
+
+function onGravMouseUp(e) {
+    if (!isDraggingGrav) return;
+    isDraggingGrav = false;
+
+    const rect = gravCanvas.getBoundingClientRect();
+    const endPos = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    const vx = (dragStartPos.x - endPos.x) * 0.04;
+    const vy = (dragStartPos.y - endPos.y) * 0.04;
+
+    if (spawnMode === 'planet') {
+        const colors = ['#00d2ff', '#22c55e', '#eab308', '#ef4444', '#a855f7', '#ec4899'];
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        gravBodies.push(new GravBody(dragStartPos.x, dragStartPos.y, vx, vy, 15, 5, randomColor, 'planet'));
+    } else if (spawnMode === 'star') {
+        gravBodies.push(new GravBody(dragStartPos.x, dragStartPos.y, vx, vy, 3500, 14, '#fde047', 'star', 'Yıldız'));
+    } else if (spawnMode === 'blackhole') {
+        gravBodies.push(new GravBody(dragStartPos.x, dragStartPos.y, vx * 0.1, vy * 0.1, 25000, 16, '#000000', 'blackhole', 'Karadelik'));
+    }
+
+    updateBodyCountUI();
+}
+
+function runGravityLoop() {
+    gravCtx.fillStyle = 'rgba(2, 2, 8, 0.3)';
+    gravCtx.fillRect(0, 0, gravCanvas.width, gravCanvas.height);
+
+    drawSpacetimeGrid();
+
+    if (!isGravPaused) {
+        for (let i = 0; i < gravBodies.length; i++) {
+            for (let j = i + 1; j < gravBodies.length; j++) {
+                let b1 = gravBodies[i], b2 = gravBodies[j];
+                let dx = b2.x - b1.x, dy = b2.y - b1.y;
+                let distSq = dx * dx + dy * dy + 50;
+                let dist = Math.sqrt(distSq);
+
+                let swallowDistance = (b1.type === 'blackhole' || b2.type === 'blackhole') 
+                    ? Math.max(b1.radius, b2.radius) * 1.5 
+                    : b1.radius + b2.radius;
+
+                if (dist < swallowDistance) {
+                    let winner = b1, loser = b2, loserIndex = j;
+
+                    if (b2.type === 'blackhole' && b1.type !== 'blackhole') {
+                        winner = b2; loser = b1; loserIndex = i;
+                    } else if (b1.type === 'blackhole' && b2.type !== 'blackhole') {
+                        winner = b1; loser = b2; loserIndex = j;
+                    } else if (b2.type === 'star' && b1.type === 'planet') {
+                        winner = b2; loser = b1; loserIndex = i;
+                    } else if (b1.type === 'star' && b2.type === 'planet') {
+                        winner = b1; loser = b2; loserIndex = j;
+                    } else if (b2.mass > b1.mass) {
+                        winner = b2; loser = b1; loserIndex = i;
+                    }
+
+                    for (let k = 0; k < 18; k++) {
+                        gravParticles.push(new ExplosionParticle(loser.x, loser.y, loser.color));
+                    }
+
+                    winner.vx = (winner.mass * winner.vx + loser.mass * loser.vx) / (winner.mass + loser.mass);
+                    winner.vy = (winner.mass * winner.vy + loser.mass * loser.vy) / (winner.mass + loser.mass);
+                    winner.mass += loser.mass * 0.8;
+                    winner.radius = Math.min(38, winner.radius + 0.3);
+
+                    gravBodies.splice(loserIndex, 1);
+                    if (loserIndex === i) { i--; break; } else { j--; continue; }
+                }
+
+                let force = (G_CONSTANT * b1.mass * b2.mass) / distSq;
+                let fx = force * (dx / dist);
+                let fy = force * (dy / dist);
+                b1.vx += (fx / b1.mass) * simTimeScale;
+                b1.vy += (fy / b1.mass) * simTimeScale;
+                b2.vx -= (fx / b2.mass) * simTimeScale;
+                b2.vy -= (fy / b2.mass) * simTimeScale;
+            }
+        }
+        gravBodies.forEach(b => b.update());
+    }
+
+    for (let p = gravParticles.length - 1; p >= 0; p--) {
+        gravParticles[p].update();
+        gravParticles[p].draw(gravCtx);
+        if (gravParticles[p].alpha <= 0) gravParticles.splice(p, 1);
+    }
+
+    gravBodies.forEach(b => b.draw(gravCtx));
+
+    if (isDraggingGrav) {
+        drawTrajectoryPrediction();
+    }
+
+    updateBodyCountUI();
+    gravAnimId = requestAnimationFrame(runGravityLoop);
+}
+
+function drawTrajectoryPrediction() {
+    let simX = dragStartPos.x;
+    let simY = dragStartPos.y;
+    let simVx = (dragStartPos.x - currentMousePos.x) * 0.04;
+    let simVy = (dragStartPos.y - currentMousePos.y) * 0.04;
+    let simMass = (spawnMode === 'blackhole') ? 25000 : (spawnMode === 'star' ? 3500 : 15);
+
+    gravCtx.beginPath();
+    gravCtx.moveTo(simX, simY);
+
+    for (let step = 0; step < 120; step++) {
+        for (let body of gravBodies) {
+            let dx = body.x - simX;
+            let dy = body.y - simY;
+            let distSq = dx * dx + dy * dy + 50;
+            let dist = Math.sqrt(distSq);
+
+            let force = (G_CONSTANT * simMass * body.mass) / distSq;
+            simVx += (force * (dx / dist)) / simMass;
+            simVy += (force * (dy / dist)) / simMass;
+        }
+
+        simX += simVx;
+        simY += simVy;
+
+        if (step % 3 === 0) {
+            gravCtx.lineTo(simX, simY);
+        }
+    }
+
+    gravCtx.strokeStyle = (spawnMode === 'blackhole') ? '#a855f7' : '#00d2ff';
+    gravCtx.lineWidth = 2;
+    gravCtx.setLineDash([4, 4]);
+    gravCtx.stroke();
+    gravCtx.setLineDash([]);
+
+    gravCtx.beginPath();
+    gravCtx.moveTo(dragStartPos.x, dragStartPos.y);
+    gravCtx.lineTo(currentMousePos.x, currentMousePos.y);
+    gravCtx.strokeStyle = 'rgba(255,255,255,0.4)';
+    gravCtx.lineWidth = 1;
+    gravCtx.stroke();
+}
+
+function loadSolarSystemPreset() {
+    clearGravitySim();
+    if (!gravCanvas) return;
+    const cx = gravCanvas.width / 2, cy = gravCanvas.height / 2;
+
+    const sun = new GravBody(cx, cy, 0, 0, 4500, 16, '#fde047', 'star', 'Güneş');
+    gravBodies.push(sun);
+
+    const planets = [
+        { r: 65, mass: 10, size: 4, color: '#a0a0c0', name: 'Merkür' },
+        { r: 105, mass: 15, size: 5, color: '#eab308', name: 'Venüs' },
+        { r: 155, mass: 18, size: 6, color: '#00d2ff', name: 'Dünya' },
+        { r: 215, mass: 12, size: 5, color: '#ef4444', name: 'Mars' },
+        { r: 295, mass: 50, size: 9, color: '#a855f7', name: 'Jüpiter' }
+    ];
+
+    planets.forEach(p => {
+        let orbitSpeed = Math.sqrt((G_CONSTANT * sun.mass) / p.r);
+        gravBodies.push(new GravBody(cx, cy - p.r, orbitSpeed, 0, p.mass, p.size, p.color, 'planet', p.name));
+    });
+}
+
+function loadBlackHoleSystemPreset() {
+    clearGravitySim();
+    if (!gravCanvas) return;
+    const cx = gravCanvas.width / 2, cy = gravCanvas.height / 2;
+
+    const bh = new GravBody(cx, cy, 0, 0, 35000, 20, '#000000', 'blackhole', 'Gargantua');
+    gravBodies.push(bh);
+
+    const stars = [
+        { r: 110, mass: 1000, size: 10, color: '#fde047', name: 'Mavi Dev' },
+        { r: 180, mass: 800, size: 9, color: '#ef4444', name: 'Kırmızı Dev' },
+        { r: 260, mass: 1200, size: 11, color: '#00d2ff', name: 'Süpernova Adayı' }
+    ];
+
+    stars.forEach(s => {
+        let orbitSpeed = Math.sqrt((G_CONSTANT * bh.mass) / s.r);
+        gravBodies.push(new GravBody(cx, cy - s.r, orbitSpeed, 0, s.mass, s.size, s.color, 'star', s.name));
+    });
+}
+
+function loadBinaryStarPreset() {
+    clearGravitySim();
+    if (!gravCanvas) return;
+    const cx = gravCanvas.width / 2, cy = gravCanvas.height / 2;
+    gravBodies.push(new GravBody(cx - 75, cy, 0, 2.6, 4500, 13, '#fde047', 'star', 'Alfa'));
+    gravBodies.push(new GravBody(cx + 75, cy, 0, -2.6, 4500, 13, '#00d2ff', 'star', 'Beta'));
+}
+
+function clearGravitySim() { gravBodies = []; gravParticles = []; updateBodyCountUI(); }
+function toggleGravityPause() { 
+    isGravPaused = !isGravPaused; 
+    const btn = document.getElementById('pauseGravityBtn');
+    if (btn) btn.innerText = isGravPaused ? '▶️ Devam Et' : '⏸️ Duraklat';
+}
+function updateBodyCountUI() {
+    const countElem = document.getElementById('bodyCountText');
+    if (countElem) countElem.innerText = gravBodies.length;
+}
+
+// --- FONKSİYONLARI GLOBAL WINDOW NESNESİNE BAĞLAMA ---
+window.openRandomTopic = openRandomTopic;
+window.openSimModal = openSimModal;
+window.closeSimModal = closeSimModal;
+window.openConverterModal = openConverterModal;
+window.closeConverterModal = closeConverterModal;
+window.openQuizModal = openQuizModal;
+window.closeQuizModal = closeQuizModal;
+window.showFavorites = showFavorites;
+window.openNasaModal = openNasaModal;
+window.closeNasaModal = closeNasaModal;
+window.openGravityModal = openGravityModal;
+window.closeGravityModal = closeGravityModal;
+window.openProofsModal = openProofsModal;
+window.closeProofsModal = closeProofsModal;
+window.closeModal = closeModal;
+window.closeAllModals = closeAllModals;
+window.filterCards = filterCards;
+window.filterCategory = filterCategory;
+window.calculateTimeDilation = calculateTimeDilation;
+window.convertUnits = convertUnits;
+window.toggleFavorite = toggleFavorite;
+window.setGravitySpawnMode = setGravitySpawnMode;
+window.loadSolarSystemPreset = loadSolarSystemPreset;
+window.loadBlackHoleSystemPreset = loadBlackHoleSystemPreset;
+window.loadBinaryStarPreset = loadBinaryStarPreset;
+window.clearGravitySim = clearGravitySim;
+window.toggleGravityPause = toggleGravityPause;
+window.filterProofs = filterProofs;
+window.calculatePythagoras = calculatePythagoras;
+window.checkQuizAnswer = checkQuizAnswer;
+
+// --- BAŞLANGIÇ YÜKLEMESİ ---
+document.addEventListener('DOMContentLoaded', () => {
+    if (typeof topicsData !== 'undefined' && Array.isArray(topicsData)) {
+        encyclopediaTopics = [...topicsData];
+        fullTopics = [...encyclopediaTopics, ...proofsTopics];
+    }
+    renderCards(encyclopediaTopics);
+    getNasaImage();
+});
