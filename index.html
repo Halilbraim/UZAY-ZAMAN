@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div id="physicsToast">🌌 Işık bile karadeliğin çekiminden kaçamaz!</div>
 
     <!-- Uzay Arka Plan Canvas -->
     <canvas id="starfield"></canvas>
@@ -19,9 +20,14 @@
         <div class="sidebar-buttons">
             <button class="action-btn" onclick="openRandomTopic()">🎲 Rastgele Konu</button>
             <button class="action-btn" onclick="openSimModal()">⏳ Zaman Genişlemesi</button>
-            <button class="action-btn" onclick="openConverterModal()">📐 Birim Dönüştürücü</button>
+            <button class="action-btn" onclick="openConverterModal()">🌌 Uzay Ölçü Birimleri</button>
+            <button class="action-btn" onclick="openQuizModal()">🎯 Bilgi Testi (Quiz)</button>
+            <button class="action-btn" onclick="showFavorites()">⭐ Favorilerim</button>
             <button id="warpBtn" class="action-btn">🚀 Işık Hızına Geç</button>
             <button id="blackholeBtn" class="action-btn">🕳️ Karadelik Modu</button>
+            <button id="ispatlarBtn" class="action-btn" onclick="openProofsModal()">
+                <span class="icon">📐</span> Matematiksel İspatlar
+            </button>
         </div>
     </aside>
 
@@ -30,84 +36,115 @@
         <div class="container">
             <header>
                 <h1>🌌 Kozmoloji & Fizik Ansiklopedisi</h1>
-                <p>Evrenin Temel Kanunları, Kuantum Dünyası ve Görelilik</p>
+                <p>Evrenin Temel Kanunları, Kuantum Dünyası ve Uzay-Zamanın Gizemleri</p>
             </header>
 
             <!-- Arama ve Kategori Filtreleri -->
             <div class="controls-wrapper">
-                <input type="text" id="searchInput" placeholder="Konu, bilim insanı veya kavram ara... (Kısayol: /)" onkeyup="filterCards()">
-                
-                <!-- Kategori Filtre Butonları -->
-                <div class="category-filters">
+                <input type="text" id="searchInput" placeholder="Ansiklopedide ara... (Örn: Görelilik, Kuantum)" oninput="filterCards()">
+
+                <div class="category-container">
                     <button class="cat-btn active" onclick="filterCategory('all', this)">Tümü</button>
-                    <button class="cat-btn" onclick="filterCategory('Görelilik', this)">Görelilik & Kozmoloji</button>
-                    <button class="cat-btn" onclick="filterCategory('Kuantum', this)">Kuantum Fiziği</button>
-                    <button class="cat-btn" onclick="filterCategory('Astrofizik', this)">Astrofizik & Yıldızlar</button>
-                    <button class="cat-btn" onclick="filterCategory('Parçacık', this)">Parçacık Fiziği</button>
-                    <button class="cat-btn" onclick="filterCategory('Klasik', this)">Klasik & Termodinamik</button>
-                    <button class="cat-btn" onclick="filterCategory('Bilim', this)">Bilim İnsanları</button>
-                    <button class="cat-btn" onclick="filterCategory('Teorik', this)">Teorik Fizik</button>
+                    <button class="cat-btn" onclick="filterCategory('relativity', this)">⚡ Görelilik</button>
+                    <button class="cat-btn" onclick="filterCategory('quantum', this)">⚛️ Kuantum</button>
+                    <button class="cat-btn" onclick="filterCategory('physics', this)">🔬 Fizik</button>
+                    <button class="cat-btn" onclick="filterCategory('astronomy', this)">🪐 Astronomi</button>
+                    <button class="cat-btn" onclick="filterCategory('cosmology', this)">🌌 Kozmoloji</button>
+                    <button class="cat-btn" onclick="filterCategory('biophysics', this)">🧠 Biyofizik</button>
+                    <button class="cat-btn" onclick="filterCategory('biotechnology', this)">🧬 Biyoteknoloji</button>
+                    <button class="cat-btn" onclick="filterCategory('technology', this)">💻 Teknoloji</button>
                 </div>
             </div>
 
-            <!-- Kart Grid Alanı -->
+            <!-- Kart Listesi Alanı -->
             <div class="card-grid"></div>
         </div>
     </div>
 
-    <!-- Detay Modal Kutusu -->
-    <div id="topicDetailModal" class="topic-modal" style="display: none;">
-        <div class="topic-modal-content">
-            <span class="close-topic-modal" onclick="closeModal()">&times;</span>
+    <!-- Detay Modal Penceresi -->
+    <div id="topicDetailModal" class="modal" style="display: none;" onclick="if(event.target === this) closeModal()">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
             <div id="topicModalBody"></div>
         </div>
     </div>
 
-    <!-- Zaman Genişlemesi Simülasyon Modal -->
-    <div id="simModal" class="modal" style="display: none;">
-        <div class="modal-content sim-box">
+    <!-- Matematiksel İspatlar Modalı -->
+    <div id="proofsModal" class="modal" style="display: none;" onclick="if(event.target === this) closeProofsModal()">
+        <div class="modal-content" style="max-width: 750px;">
+            <span class="close-btn" onclick="closeProofsModal()">&times;</span>
+            <h2 style="color: #00d2ff; margin-bottom: 15px;">📐 Ünlü Formüllerin Matematiksel İspatları</h2>
+            <p style="color: #a0a0c0; font-size: 0.9rem; margin-bottom: 20px;">Fizik ve matematiğin akışını değiştiren en önemli denklemlerinin adım adım türetilmeleri.</p>
+
+            <div id="proofsListContainer" style="display: flex; flex-direction: column; gap: 15px;">
+                <!-- İspatlar dinamik olarak buraya gelecek -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Zaman Genişlemesi Simülasyon Modalı -->
+    <div id="simModal" class="modal" style="display: none;" onclick="if(event.target === this) closeSimModal()">
+        <div class="modal-content" style="max-width: 500px;">
             <span class="close-btn" onclick="closeSimModal()">&times;</span>
-            <h2>⏳ Göreli Zaman Genişlemesi</h2>
-            <p>Işık hızına yakın seyahat eden bir gözlemci için zamanın nasıl yavaşladığını hesaplayın.</p>
-            
-            <div class="sim-control-group">
-                <label>Seyahat Hızı (% Işık Hızı): <span id="speedValue">%90 c</span></label>
-                <input type="range" id="speedInput" min="1" max="99" value="90" oninput="calculateTimeDilation()">
+            <h2 style="color: #a855f7; margin-bottom: 15px;">⏳ Zaman Genişlemesi Hesaplayıcı</h2>
+            <p style="color: #a0a0c0; font-size: 0.9rem; margin-bottom: 20px;">Işık hızına yakın seyahat ettiğinizde zamanın sizin için nasıl yavaşladığını ve Dünya'dan ne kadar ileri gideceğinizi hesaplayın.</p>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display:block; color:#fff; margin-bottom:5px; font-size:0.9rem;">Seyahat Hızı: <span id="speedValue" style="color:#a855f7; font-weight:bold;">%90 c</span></label>
+                <input type="range" id="speedInput" min="1" max="99" value="90" style="width:100%; accent-color:#a855f7;" oninput="calculateTimeDilation()">
             </div>
 
-            <div class="sim-control-group">
-                <label>Dünya'da Geçen Süre (Yıl):</label>
-                <input type="number" id="spaceTimeInput" value="10" oninput="calculateTimeDilation()">
+            <div style="margin-bottom: 20px;">
+                <label style="display:block; color:#fff; margin-bottom:5px; font-size:0.9rem;">Gemide Geçen Süre (Yıl):</label>
+                <input type="number" id="spaceTimeInput" value="5" min="0.1" style="width:100%; padding:8px; background:rgba(255,255,255,0.05); border:1px solid rgba(168,85,247,0.3); border-radius:6px; color:#fff;" oninput="calculateTimeDilation()">
             </div>
 
-            <div class="sim-results">
-                <p>Gezginin Yaşadığı Süre: <strong id="earthTimeResult">22.94</strong> Yıl</p>
-                <p>Yaş Farkı (Dünya lehine): <strong id="ageDiffResult">12.94</strong> Yıl</p>
+            <div style="background:rgba(168,85,247,0.1); padding:15px; border-radius:8px; border:1px solid rgba(168,85,247,0.3);">
+                <p style="color:#d0d0e0; font-size:0.9rem; margin-bottom:8px;">🌍 Dünya'da Geçen Süre: <b id="earthTimeResult" style="color:#a855f7; font-size:1.1rem;">11.47</b> Yıl</p>
+                <p style="color:#d0d0e0; font-size:0.9rem; margin:0;">🚀 Yaş Farkı (Dünya - Sizin): <b id="ageDiffResult" style="color:#22c55e; font-size:1.1rem;">6.47</b> Yıl daha genç kaldınız!</p>
             </div>
         </div>
     </div>
 
-    <!-- Birim Dönüştürücü Modal -->
-    <div id="converterModal" class="modal" style="display: none;">
-        <div class="modal-content sim-box">
+    <!-- Uzay Ölçü Birimleri Dönüştürücü Modalı -->
+    <div id="converterModal" class="modal" style="display: none;" onclick="if(event.target === this) closeConverterModal()">
+        <div class="modal-content" style="max-width: 500px;">
             <span class="close-btn" onclick="closeConverterModal()">&times;</span>
-            <h2>📐 Kozmik Birim Dönüştürücü</h2>
-            <p>Işık yılı değerini diğer astronomik mesafelerle dönüştürün.</p>
-            
-            <div class="sim-control-group">
-                <label>Işık Yılı (ly):</label>
-                <input type="number" id="lyInput" value="1" oninput="convertUnits()">
+            <h2 style="color: #a855f7; margin-bottom: 15px;">🌌 Uzay Ölçü Birimleri Çevirici</h2>
+            <p style="color: #a0a0c0; font-size: 0.9rem; margin-bottom: 20px;">Işık yılı cinsinden mesafeleri trilyon kilometreye, Astronomik Birime (AU) ve Parseke (pc) dönüştürün.</p>
+
+            <div style="margin-bottom: 20px;">
+                <label style="display:block; color:#fff; margin-bottom:5px; font-size:0.9rem;">Mesafe (Işık Yılı - ly):</label>
+                <input type="number" id="lyInput" value="4.24" min="0" step="0.1" style="width:100%; padding:8px; background:rgba(255,255,255,0.05); border:1px solid rgba(168,85,247,0.3); border-radius:6px; color:#fff;" oninput="convertUnits()">
             </div>
 
-            <div class="sim-results">
-                <p>Trilyon Kilometre: <strong id="kmResult">9.46 Trilyon km</strong></p>
-                <p>Astronomik Birim (AU): <strong id="auResult">63,241 AU</strong></p>
-                <p>Parsek (pc): <strong id="pcResult">0.307 pc</strong></p>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="color:#a0a0c0; font-size:0.9rem;">Trilyon Kilometre:</span>
+                    <b id="kmResult" style="color:#a855f7; font-size:1rem;">40.11 Trilyon km</b>
+                </div>
+                <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="color:#a0a0c0; font-size:0.9rem;">Astronomik Birim (AU):</span>
+                    <b id="auResult" style="color:#a855f7; font-size:1rem;">268,142 AU</b>
+                </div>
+                <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="color:#a0a0c0; font-size:0.9rem;">Parsek (pc):</span>
+                    <b id="pcResult" style="color:#a855f7; font-size:1rem;">1.300 pc</b>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- JavaScript Dosyaları -->
+    <!-- Quiz Modalı -->
+    <div id="quizModal" class="modal" style="display: none;" onclick="if(event.target === this) closeQuizModal()">
+        <div class="modal-content" style="max-width: 550px; text-align: center;">
+            <span class="close-btn" onclick="closeQuizModal()">&times;</span>
+            <h2 style="color: #a855f7; margin-bottom: 15px;">🎯 Kozmoloji & Fizik Quizi</h2>
+            <div id="quizBodyContainer"></div>
+        </div>
+    </div>
+
+    <!-- Veri Tabanı ve JS Dosyaları -->
     <script src="topicsData.js"></script>
     <script src="script.js"></script>
 </body>

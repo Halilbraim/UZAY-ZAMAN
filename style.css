@@ -30,8 +30,8 @@ body {
 .sidebar {
     width: 250px;
     height: 100vh;
-    background: transparent; /* Tamamen saydam arka plan */
-    border-right: none;      /* Sağdaki şerit çizgi kaldırıldı */
+    background: transparent;
+    border-right: none;
     position: fixed;
     top: 0;
     left: 0;
@@ -58,7 +58,6 @@ body {
     gap: 12px;
 }
 
-/* --- ÜST SATIR / SIDEBAR BUTONLARI (Mor/Pembe) --- */
 .sidebar-buttons .action-btn, .action-btn {
     width: 100%;
     text-align: left;
@@ -143,22 +142,26 @@ header p {
     box-shadow: 0 0 25px rgba(0, 210, 255, 0.3);
 }
 
-.category-filters {
+/* --- KATEGORİ ALANI VE BUTONLAR (Güncellenmiş Dengeli Yapı) --- */
+.category-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
+    max-width: 800px; /* Butonların erken alt satıra geçip düzgün iki satır oluşturmasını sağlar */
+    margin: 0 auto;
+    padding: 0 15px;
     width: 100%;
 }
 
-/* --- ALT SATIR / KATEGORİ FİLTRE BUTONLARI (Mavi) --- */
 .cat-btn {
-    padding: 8px 16px;
+    white-space: nowrap;
+    padding: 8px 18px;
     border-radius: 20px;
+    cursor: pointer;
     border: 1px solid rgba(0, 210, 255, 0.3);
     background: rgba(5, 5, 10, 0.6);
     color: #00d2ff;
-    cursor: pointer;
     font-size: 0.9rem;
     transition: all 0.2s ease;
 }
@@ -223,18 +226,18 @@ header p {
     font-weight: bold;
 }
 
-/* --- MODAL PENCERE (Ortalanmış, Azaltılmış Blur & İnce Kaydırma Çubuğu) --- */
+/* --- MODAL PENCERE --- */
 .topic-modal, .modal {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(5, 5, 10, 0.4); /* Arkadaki karartma */
-    backdrop-filter: blur(4px);      /* Azaltılmış blur efekti */
+    background: rgba(5, 5, 10, 0.4);
+    backdrop-filter: blur(4px);
     display: flex;
-    justify-content: center;        /* Yatayda tam ortalama */
-    align-items: center;            /* Dikeyde tam ortalama */
+    justify-content: center;
+    align-items: center;
     z-index: 1000;
 }
 
@@ -249,14 +252,11 @@ header p {
     box-sizing: border-box;
     position: relative;
     box-shadow: 0 0 30px rgba(0, 210, 255, 0.25);
-    
-    /* Modern İnce Kaydırma Çubuğu */
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: #00d2ff transparent;
 }
 
-/* Chrome, Edge ve Safari için İnce Kaydırma Çubuğu */
 .topic-modal-content::-webkit-scrollbar, .modal-content::-webkit-scrollbar {
     width: 6px;
 }
@@ -332,4 +332,116 @@ header p {
     color: #00d2ff;
     display: block;
     margin-bottom: 2px;
+}
+
+/* Sol menü butonları odak/tıklama koruması */
+.sidebar button:focus,
+.sidebar button:active,
+.sidebar button:visited,
+.sidebar a:focus,
+.sidebar a:active,
+.sidebar a:visited {
+    color: inherit;
+}
+
+.sidebar button.active,
+.sidebar button:active {
+    background: linear-gradient(135deg, #a855f7, #ec4899) !important;
+    color: #ffffff !important;
+    border-color: #d946ef !important;
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.4) !important;
+}
+
+/* Toast Bildirimi */
+#physicsToast {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    background: rgba(20, 10, 30, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(168, 85, 247, 0.4);
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    box-shadow: 0 10px 30px rgba(168, 85, 247, 0.25);
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+}
+
+#physicsToast.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Quiz Şık Stilleri */
+.quiz-option-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    color: #fff;
+    padding: 12px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    text-align: left;
+    transition: all 0.25s ease;
+}
+
+.quiz-option-btn:hover {
+    background: rgba(168, 85, 247, 0.15);
+    border-color: #a855f7;
+    transform: translateY(-2px);
+}
+
+.quiz-option-btn.correct {
+    background: rgba(34, 197, 94, 0.2) !important;
+    border-color: #22c55e !important;
+    color: #4ade80 !important;
+}
+
+.quiz-option-btn.wrong {
+    background: rgba(239, 68, 68, 0.2) !important;
+    border-color: #ef4444 !important;
+    color: #f87171 !important;
+}
+/* --- FAVORİ YILDIZ BUTONU --- */
+.card {
+    position: relative;
+}
+
+.fav-star {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #a0a0c0;
+    font-size: 1.2rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    z-index: 2;
+}
+
+.fav-star:hover {
+    border-color: #eab308;
+    color: #eab308;
+    transform: scale(1.15);
+}
+
+.fav-star.active {
+    color: #eab308;
+    border-color: #eab308;
+    background: rgba(234, 179, 8, 0.15);
 }

@@ -1995,3 +1995,438 @@ const topicsData = [
         ]
     }
 ];
+// --- 33 İSPAT VE TEOREM VERİTABANI ---
+const extendedProofsData = [
+    // --- MATEMATİK & GEOMETRİ ---
+    {
+        id: 'ispat-pisagor',
+        cat: 'matematik',
+        icon: '🔺',
+        title: 'Pisagor Teoremi İspatı',
+        desc: 'Dik üçgenlerde hipotenüsün karesinin, dik kenarların kareleri toplamına eşit olduğunu gösteren klasik geometri ispatı.',
+        subitems: [
+            { title: 'Adım 1: Kare Yerleşimi', desc: 'Bir kenarı (a+b) olan büyük bir kare çizilir ve içine 4 adet özdeş dik üçgen yerleştirilir.' },
+            { title: 'Adım 2: Alan Hesaplaması', desc: 'Büyük karenin alanı (a+b)² = a² + 2ab + b² olarak açılır.' },
+            { title: 'Adım 3: İç Üçgenler', desc: 'Aynı alan 4 üçgenin alanı (2ab) ve ortada kalan c kenarlı karenin alanı (c²) toplamına eşittir: a² + 2ab + b² = c² + 2ab.' },
+            { title: 'Adım 4: Sonuç', desc: 'Her iki taraftaki 2ab terimleri sadeleşir ve c² = a² + b² elde edilir.' }
+        ]
+    },
+    {
+        id: 'ispat-euler',
+        cat: 'matematik',
+        icon: '📐',
+        title: 'Euler Özdeşliği (e^(iπ) + 1 = 0)',
+        desc: 'Matematiğin beş temel sabitini (0, 1, e, i, π) tek bir zarif denklemde birleştiren efsanevi formül.',
+        subitems: [
+            { title: 'Adım 1: Taylor Serisi', desc: 'e^x, sin(x) ve cos(x) fonksiyonlarının Maclaurin serisi açılımları yazılır.' },
+            { title: 'Adım 2: Karmaşık Sayı Girişi', desc: 'x yerine iθ (veya iπ) yazıldığında serilerin kosinüs ve sinüs fonksiyonlarına dönüştüğü görülür.' },
+            { title: 'Adım 3: Euler Formülü', desc: 'e^(iθ) = cos(θ) + i·sin(θ) denklemi elde edilir.' },
+            { title: 'Adım 4: Pi Değerinin Verilmesi', desc: 'θ = π alındığında cos(π) = -1 ve sin(π) = 0 olur; böylece e^(iπ) = -1, yani e^(iπ) + 1 = 0 çıkar.' }
+        ]
+    },
+    {
+        id: 'ispat-asal',
+        cat: 'matematik',
+        icon: '🔢',
+        title: 'Öklid Asal Sayıların Sonsuzluğu İspatı',
+        desc: 'Asal sayıların sonlu olmadığını, yani sonsuza kadar devam ettiğini kanıtlayan en eski ve en şık çelişki yoluyla ispat.',
+        subitems: [
+            { title: 'Adım 1: Varsayım', desc: 'Asal sayıların sonlu olduğunu varsayalım: {p₁, p₂, ..., pₙ}.' },
+            { title: 'Adım 2: Yeni Sayı Üretimi', desc: 'Bu sonlu kümedeki tüm sayıların çarpımının 1 fazlası olan yeni bir P sayısı tanımlayalım: P = (p₁·p₂·...·pₙ) + 1.' },
+            { title: 'Adım 3: Bölünme İncelemesi', desc: 'P sayısı listedeki hiçbir asal sayıya tam bölünmez (her seferinde 1 kalanını verir).' },
+            { title: 'Adım 4: Çelişki ve Sonuç', desc: 'O halde P ya kendisi asaldır ya da listede olmayan başka bir asal sayıya bölünüktür. Her iki durumda da asal sayıların sonlu olduğu varsayımı çürür.' }
+        ]
+    },
+    {
+        id: 'ispat-kok2',
+        cat: 'matematik',
+        icon: '🧮',
+        title: 'Kök 2’nin İrrasyonelliği',
+        desc: '√2 sayısının iki tam sayının oranı (kesir) olarak yazılamayacağını gösteren klasik indirgeme ispatı.',
+        subitems: [
+            { title: 'Adım 1: Rasyonel Kabulü', desc: '√2 = a/b şeklinde aralarında asal (en sade haliyle) iki tam sayının oranı olarak yazabildiğimizi varsayalım.' },
+            { title: 'Adım 2: Kare Alma', desc: 'Her iki tarafın karesi alınırsa 2 = a²/b² yani a² = 2b² elde edilir. Bu, a²\'nin çift sayı olduğunu gösterir.' },
+            { title: 'Adım 3: Çift Sayı Değişkeni', desc: 'a çift ise a = 2k yazılabilir. Denklemde yerine konursa b² = 2k² olur, yani b de çifttir.' },
+            { title: 'Adım 4: Çelişki', desc: 'Hem a hem b çift olamaz çünkü onların arasal olduğunu (en sade kesir olduğunu) baştan kabul etmiştik. Demek ki √2 irrasyoneldir.' }
+        ]
+    },
+    {
+        id: 'ispat-turev',
+        cat: 'matematik',
+        icon: '📈',
+        title: 'Türevin Temel Mantığı (Limit İspatı)',
+        desc: 'Bir eğrinin herhangi bir noktasındaki teğet eğimini bulan türev formülünün geometrik temeli.',
+        subitems: [
+            { title: 'Adım 1: Kesen Doğrusu', desc: 'Eğri üzerinde iki nokta seçilir: (x, f(x)) ve (x+h, f(x+h)).' },
+            { title: 'Adım 2: Eğin Formülü', desc: 'Bu iki noktadan geçen secant (kesen) doğrusunun eğimi: m = [f(x+h) - f(x)] / h.' },
+            { title: 'Adım 3: Limite Gitme', desc: 'h mesafesi sıfıra yaklaşırken (h -> 0) kesen doğrusu teğet doğrusuna dönüşür.' },
+            { title: 'Adım 4: Türev Tanımı', desc: 'f\'(x) = lim(h->0) [f(x+h) - f(x)] / h formülü türevin türetilmesini sağlar.' }
+        ]
+    },
+    {
+        id: 'ispat-integral-alan',
+        cat: 'matematik',
+        icon: '📊',
+        title: 'Riemann İntegrali ile Alan Hesabı',
+        desc: 'Eğri altındaki alanı sonsuz küçük dikdörtgenlere bölerek hesaplama mantığı.',
+        subitems: [
+            { title: 'Adım 1: Bölümleme', desc: '[a, b] aralığı n adet eşit Δx genişliğinde alt aralıklara bölünür.' },
+            { title: 'Adım 2: Dikdörtgenler', desc: 'Her aralıkta bir yükseklik seçilerek dikdörtgenler oluşturulur.' },
+            { title: 'Adım 3: Toplam (Sigma)', desc: 'Tüm dikdörtgenlerin alanları toplanır: Σ f(x_i) · Δx.' },
+            { title: 'Adım 4: Limit', desc: 'n sonsuza giderken (Δx -> 0) bu toplam kesin eğri altı alanını yani integrali verir.' }
+        ]
+    },
+    {
+        id: 'ispat-binomial',
+        cat: 'matematik',
+        icon: '✨',
+        title: 'Binom Açılımı ve Kombinasyon',
+        desc: '(x + y)^n ifadelerinin katsayılarının Pascal üçgeni ve kombinasyonla ilişkisinin mantığı.',
+        subitems: [
+            { title: 'Adım 1: Çarpım Mantığı', desc: '(x+y)(x+y)... n tane terimin çarpımı olarak düşünülür.' },
+            { title: 'Adım 2: Seçim', desc: 'Her parantezden ya x ya y seçilir. k tane y seçilmesi demek n taneden k seçilmesi demektir.' },
+            { title: 'Adım 3: Kombinasyon', desc: 'Katsayılar C(n,k) kombinasyon formülü ile ifade edilir.' },
+            { title: 'Adım 4: Formül', desc: '(x+y)^n = Σ C(n,k) * x^(n-k) * y^k formülü elde edilir.' }
+        ]
+    },
+    {
+        id: 'ispat-aritmetik-toplam',
+        cat: 'matematik',
+        icon: '➕',
+        title: 'Gauss Aritmetik Dizi Toplam Formülasyonu',
+        desc: '1\'den n\'e kadar olan sayıların toplamını bulan n(n+1)/2 formülünün görsel ispatı.',
+        subitems: [
+            { title: 'Adım 1: Seri Yazılımı', desc: 'S = 1 + 2 + 3 + ... + n' },
+            { title: 'Adım 2: Ters Yazılım', desc: 'S = n + (n-1) + (n-2) + ... + 1' },
+            { title: 'Adım 3: Taraf Tarafa Toplama', desc: 'İki denklem alt alta toplanırsa n tane (n+1) terimi elde edilir: 2S = n(n+1).' },
+            { title: 'Adım 4: Sonuç', desc: 'S = n(n+1) / 2 formülü bulunur.' }
+        ]
+    },
+    {
+        id: 'ispat-geometrik-seri',
+        cat: 'matematik',
+        icon: '📉',
+        title: 'Geometrik Seri Toplamı İspatı',
+        desc: '1 + r + r² + r³ + ... sonsuz toplamının |r| < 1 için 1/(1-r) değerine yakınsaması.',
+        subitems: [
+            { title: 'Adım 1: S Denklemi', desc: 'S = 1 + r + r² + r³ + ...' },
+            { title: 'Adım 2: r ile Çarpım', desc: 'rS = r + r² + r³ + r⁴ + ...' },
+            { title: 'Adım 3: Çıkarma', desc: 'S - rS = 1 elde edilir çünkü diğer tüm terimler birbirini götürür.' },
+            { title: 'Adım 4: Çözüm', desc: 'S(1 - r) = 1 => S = 1 / (1 - r).' }
+        ]
+    },
+    {
+        id: 'ispat-turev-zincir',
+        cat: 'matematik',
+        icon: '🔗',
+        title: 'Türevde Zincir Kuralı (Chain Rule)',
+        desc: 'Bileşke fonksiyonların türevinin nasıl alındığının matematiksel gerekçesi.',
+        subitems: [
+            { title: 'Adım 1: Bileşke Tanımı', desc: 'y = f(g(x)) şeklinde iç içe iki fonksiyon tanımlanır.' },
+            { title: 'Adım 2: Değişim Oranları', desc: 'Δy / Δx oranını Δu üzerinden genişletelim: (Δy / Δu) * (Δu / Δx).' },
+            { title: 'Adım 3: Limit Geçişi', desc: 'Δx -> 0 iken Δu da 0\'a gider.' },
+            { title: 'Adım 4: Sonuç', desc: 'dy/dx = (dy/du) * (du/dx) bağıntısı ispatlanır.' }
+        ]
+    },
+
+    // --- FİZİK VE GÖRELİLİK ---
+    {
+        id: 'ispat-mass-energy',
+        cat: 'teorik',
+        icon: '⚡',
+        title: 'Einstein E = mc² Kütle-Enerji Eşdeğerliği',
+        desc: 'Kütlenin mutlak olmadığını, saf enerjiye dönüştürülebileceğini gösteren özel görelilik türevi.',
+        subitems: [
+            { title: 'Adım 1: Relativistik Moment', desc: 'Göreceli momentum p = γmv formülüyle tanımlanır (gamma Lorentz faktörüdür).' },
+            { title: 'Adım 2: İş-Enerji Teoremi', desc: 'Cismin kazanacağı kinetik enerji, kuvvetin yaptığı işe (W = ∫ F dx) eşittir.' },
+            { title: 'Adım 3: İntegral Çözümü', desc: 'Kuvvet yerine momentumun zamana göre türevi yazılıp integral alındığında E = mc² - m0c² formülü belirir.' },
+            { title: 'Adım 4: Durgun Enerji', desc: 'Cisim dururken bile sahip olduğu iç enerji E₀ = mc² olarak kalır.' }
+        ]
+    },
+    {
+        id: 'ispat-zaman-genislemesi',
+        cat: 'teorik',
+        icon: '⏳',
+        title: 'Özel Görelilik: Zaman Genişlemesi',
+        desc: 'Işık hızı sabit olduğunda hızlı hareket eden sistemlerde zamanın yavaş akmasının geometri tabanlı ispatı.',
+        subitems: [
+            { title: 'Adım 1: Işık Saati', desc: 'Aralarında d mesafesi bulunan iki ayna arasında dikey olarak seken bir foton saati hayal edilsin.' },
+            { title: 'Adım 2: Hareketli Gözlemci', desc: 'Saat v hızıyla hareket ederse, dışarıdaki sabit gözlemciye göre foton zikzak (üçgensel yol) çizer.' },
+            { title: 'Adım 3: Pisagor Bağıntısı', desc: 'Işığın kat ettiği uzun yol (c * t\') ile saatim yatay aldığı yol (v * t\') Pisagor teoremiyle birleştirilir.' },
+            { title: 'Adım 4: Lorentz Faktörü', desc: 'Denklemler düzenlendiğinde t\' = t / sqrt(1 - v²/c²) zaman genişlemesi formülüne ulaşılır.' }
+        ]
+    },
+    {
+        id: 'ispat-uzunluk-büzülmesi',
+        cat: 'teorik',
+        icon: '📏',
+        title: 'Lorentz Uzunluk Büzülmesi',
+        desc: 'Işık hızına yakın hareket eden nesnelerin hareket yönünde kısalmasının matematiksel türevi.',
+        subitems: [
+            { title: 'Adım 1: Eşzamanlılık', desc: 'Hareketli referans sistemindeki bir çubuğun boyunu ölçmek için uç noktalarının aynı anda işaretlenmesi gerekir.' },
+            { title: 'Adım 2: Lorentz Dönüşümleri', desc: 'Sabit ve hareketli sistemler arasındaki koordinat geçiş denklemleri yazılır.' },
+            { title: 'Adım 3: Zaman Farkı', desc: 'Hareketli sistemdeki eşzamanlılığın, duran sistem için aynı anda gerçekleşmediği hesaba katılır.' },
+            { title: 'Adım 4: Sonuç', desc: 'L = L0 * sqrt(1 - v²/c²) formülü ile boyun kısalması kanıtlanır.' }
+        ]
+    },
+    {
+        id: 'ispat-sicaklik-entropi',
+        cat: 'teorik',
+        icon: '🔥',
+        title: 'Termodinamiğin 2. Yasası ve Entropi',
+        desc: 'İzole sistemlerde entropinin (düzensizliğin) asla azalmayacağının istatistiksel ve matematiksel temeli.',
+        subitems: [
+            { title: 'Adım 1: Mikro-durumlar', desc: 'Boltzmann\'ın S = k * ln(W) formülü ele alınır (W olası mikro-durum sayısıdır).' },
+            { title: 'Adım 2: Olasılık Dağılımı', desc: 'Doğal süreçler en yüksek olasılığa sahip, yani en dağınık durumlara doğru evrilir.' },
+            { title: 'Adım 3: Tersinmezlik', desc: 'Dağınık bir sistemin kendiliğinden daha düzenli bir mikro-duruma dönme olasılığı sıfıra yakındır.' },
+            { title: 'Adım 4: Sonuç', desc: 'ΔS >= 0 eşitsizliği evrenin genel entropisinin sürekli arttığını kesinleştirir.' }
+        ]
+    },
+    {
+        id: 'ispat-korunum-enerji',
+        cat: 'teorik',
+        icon: '🔄',
+        title: 'Noether Teoremi (Simetri ve Korunum Kanunları)',
+        desc: 'Fizikteki her sürekli simetrinin bir korunum kanununa karşılık geldiğini gösteren Emmy Noether teoremi.',
+        subitems: [
+            { title: 'Adım 1: Eylem Prensibi', desc: 'Fiziksel sistemlerin aksiyon integrali (Lagrangian) üzerinden türetilmesi.' },
+            { title: 'Adım 2: Zaman Simetrisi', desc: 'Fizik kanunlarının zamanda değişmemesi (zaman öteleme simetrisi).' },
+            { title: 'Adım 3: Euler-Lagrange', desc: 'Simetri altında sistemin türevi alındığında değişmeyen bir miktar (korunan nicelik) olduğu görülür.' },
+            { title: 'Adım 4: Sonuç', desc: 'Zaman simetrisi Enerji Korunumu\'nu, uzay simetrisi ise Momentum Korunumu\'nu doğurur.' }
+        ]
+    },
+    {
+        id: 'ispat-newton-yercekimi',
+        cat: 'astrofizik',
+        icon: '🍎',
+        title: 'Newton Evrensel Çekim Yasası ve Kepler',
+        desc: 'Kepler\'in gezegensel hareket kanunlarından yola çıkarak 1/r² çekim yasasının matematiksel türevi.',
+        subitems: [
+            { title: 'Adım 1: Dairesel Yörünge', desc: 'Gezegenlerin güneş etrafında dairesel hareket yaptığı varsayılır (F = m * v² / r).' },
+            { title: 'Adım 2: Kepler 3. Kanunu', desc: 'T² / r³ oranının sabit olduğu bilgisi (T = 2πr / v) denkleme entegre edilir.' },
+            { title: 'Adım 3: Hızın Ele Edilmesi', desc: 'Hız yerine yörünge yarıçapı ve periyot ifadeleri konulur.' },
+            { title: 'Adım 4: Ters Kare Kanunu', desc: 'Kuvvetin mesafenin karesiyle ters orantılı olduğu F = G * (m1*m2)/r² şeklinde kanıtlanır.' }
+        ]
+    },
+    {
+        id: 'ispat-kara-delik-sicaklik',
+        cat: 'kozmoloji',
+        icon: '🕳️',
+        title: 'Hawking Işıması ve Termodinamik İlişki',
+        desc: 'Karadeliklerin tamamen siyah olmadığını, kuantum dalgalanmaları nedeniyle termal ışıma yaydığının özeti.',
+        subitems: [
+            { title: 'Adım 1: Olay Ufku Vakumu', desc: 'Olay ufku sınırında kuantum alan teorisine göre sanal parçacık çiftleri sürekli oluşur ve yok olur.' },
+            { title: 'Adım 2: Parçacık Ayrışması', desc: 'Çiftlerden biri içeri düşerken diğeri dışarıda kalıp gerçek bir parçacık olarak kaçabilir.' },
+            { title: 'Adım 3: Kütle Kaybı', desc: 'Dışarı kaçan enerji, karadeliğin kütlesinden (negatif enerji akışı yoluyla) harcanır.' },
+            { title: 'Adım 4: Sıcaklık Formülü', desc: 'Karadeliğin sıcaklığının kütlesiyle ters orantılı olduğu (T ~ 1/M) teorik olarak gösterilir.' }
+        ]
+    },
+    {
+        id: 'ispat-dalga-parcacik',
+        cat: 'kuantum',
+        icon: '🌊',
+        title: 'De Broglie Dalga Boyu İspatı',
+        desc: 'Işığın hem tanecik hem dalga özelliği göstermesinden ilham alarak tüm maddelerin bir dalga boyuna sahip olması.',
+        subitems: [
+            { title: 'Adım 1: Photon Enerjisi', desc: 'Einstein\'ın E = hf (veya E = hc/λ) formülü ile Planck sabiti birleştirilir.' },
+            { title: 'Adım 2: Göreceli Enerji', desc: 'E = mc² denklemi ile photon momentumu p = E/c denklemi bağdaştırılır.' },
+            { title: 'Adım 3: Dalga Boyu Çıkarımı', desc: 'mc² = hc/λ eşitliğinden λ = h/mc (veya genel kütle için p) elde edilir.' },
+            { title: 'Adım 4: De Broglie Formülü', desc: 'Her hareketli kütlenin λ = h / p dalga boyuna sahip olduğu kanıtlanır.' }
+        ]
+    },
+    {
+        id: 'ispat-belirsizlik',
+        cat: 'kuantum',
+        icon: '⚛️',
+        title: 'Heisenberg Belirsizlik İlkesi',
+        desc: 'Bir parçacığın konumunun ve momentumunun aynı anda kusursuz bir şekilde ölçülememesinin matematiksel temeli.',
+        subitems: [
+            { title: 'Adım 1: Dalga Paketi', desc: 'Kuantum parçacıkları uzayda dalga paketleri olarak temsil edilir (Fourier dönüşümleri).' },
+            { title: 'Adım 2: Standart Sapma', desc: 'Konum belirsikliği (Δx) ve dalga boyu/momentum belirsizliği (Δp) tanımlanır.' },
+            { title: 'Adım 3: Fourier Eşitsizliği', desc: 'Matematikte bir fonksiyon ile Fourier dönüşümünün yayılım alanları çarpımı sabit bir sınırdan küçük olamaz.' },
+            { title: 'Adım 4: Sonuç', desc: 'Δx * Δp >= ℏ / 2 belirsizlik bağıntısı matematiksel olarak türetilir.' }
+        ]
+    },
+    {
+        id: 'ispat-schrodinger',
+        cat: 'kuantum',
+        icon: '🐱',
+        title: 'Schrödinger Dalga Denkleminin Türetilmesi',
+        desc: 'Kuantum mekaniğinin temelini oluşturan zaman bağımlı dalga denkleminin enerji korunumundan türetilmesi.',
+        subitems: [
+            { title: 'Adım 1: Klasik Enerji', desc: 'Toplam enerji E = Kinetik + Potansiyel (E = p²/2m + V) olarak yazılır.' },
+            { title: 'Adım 2: Operatör Dönüşümleri', desc: 'Kuantum mekaniğinde enerji ve momentum yerine diferansiyel operatörler (E -> iℏ ∂/∂t, p -> -iℏ ∇) konulur.' },
+            { title: 'Adım 3: Dalga Fonksiyonuna Uygulama', desc: 'Bu operatörler psi (ψ) dalga fonksiyonuna uygulanır.' },
+            { title: 'Adım 4: Sonuç', desc: 'Hψ = iℏ (∂ψ/∂t) Schrödinger denklemi elde edilir.' }
+        ]
+    },
+    {
+        id: 'ispat-hubble',
+        cat: 'kozmoloji',
+        icon: '🌌',
+        title: 'Hubble-Lemaître Evrenin Genişlemesi',
+        desc: 'Uzak galaksilerin bizden uzaklaşma hızının mesafeleriyle doğru orantılı olmasının gözlemsel ispatı.',
+        subitems: [
+            { title: 'Adım 1: Doppler Kayması', desc: 'Galaksilerden gelen ışığın dalga boyundaki kırmızıya kayma (redshift - z) miktarı ölçülür.' },
+            { title: 'Adım 2: Uzaklık Ölçümü', desc: 'Sefeid yıldızları ve la Sinyal Süpernovalar ile galaksi mesafeleri (d) hesaplanır.' },
+            { title: 'Adım 3: Korelasyon', desc: 'Hız ile mesafe grafiğe döküldüğünde doğrusal bir doğru elde edilir.' },
+            { title: 'Adım 4: Hubble Yasası', desc: 'v = H₀ * d formülü ile evrenin homojen olarak genişlediği kanıtlanır.' }
+        ]
+    },
+    {
+        id: 'ispat-fluctuation',
+        cat: 'kozmoloji',
+        icon: '✨',
+        title: 'Kozmik Mikrodalga Arka Plan (CMB) Dalgalanmaları',
+        desc: 'Erken evrendeki kuantum dalgalanmalarının evrenin büyük ölçekli yapısını nasıl oluşturduğu.',
+        subitems: [
+            { title: 'Adım 1: Enflasyon Dönemi', desc: 'Evrenin ilk saniyelerindeki üstel (exponential) genleşme aşaması.' },
+            { title: 'Adım 2: Kuantum Çalkantıları', desc: 'Mikroskobik kuantum dalgalanmalarının uzayın genişlemesiyle makro boyuta taşınması.' },
+            { title: 'Adım 3: Yoğunluk Farkları', desc: 'Bu dalgalanmaların uzayda sıcaklık ve yoğunluk sapmaları (ΔT/T ~ 10⁻⁵) yaratması.' },
+            { title: 'Adım 4: Galaksi Tohumları', desc: 'Yerçekiminin bu yoğunluk farklarını çekerek yıldızları ve galaksileri oluşturması.' }
+        ]
+    },
+    {
+        id: 'ispat-kardinal',
+        cat: 'matematik',
+        icon: '♾️',
+        title: 'Cantor Diyagonal Metodu (Sonsuzlukların Boyutları)',
+        desc: 'Reel sayıların doğal sayılardan daha "büyük" bir sonsuzluğa sahip olduğunu kanıtlayan harika çaprazlama ispatı.',
+        subitems: [
+            { title: 'Adım 1: Varsayım', desc: 'Tüm reel sayıların (0 ile 1 arası) doğal sayılarla birebir eşlenebildiğini (sayılabilir olduğunu) varsayalım.' },
+            { title: 'Adım 2: Liste Oluşturma', desc: 'Bu sayıların sonsuz bir liste halinde alt alta dizildiği düşünülür.' },
+            { title: 'Adım 3: Diyagonal Sayı Üretimi', desc: 'Listenin köşegenindeki rakamlar alınıp her biri 1 artırılarak yeni bir x sayısı oluşturulur.' },
+            { title: 'Adım 4: Çelişki', desc: 'Oluşturulan bu yeni x sayısı, listedeki hiçbir sayıyla aynı olamaz (en az bir basamağı farklıdır). Demek ki reel sayılar doğal sayılardan büyüktür.' }
+        ]
+    },
+    {
+        id: 'ispat-bayes',
+        cat: 'matematik',
+        icon: '📊',
+        title: 'Bayes Teoremi ve Koşullu Olasılık',
+        desc: 'Yeni kanıtlar ışığında bir hipotezin olasılığının nasıl güncellendiğini gösteren temel istatistik teoremi.',
+        subitems: [
+            { title: 'Adım 1: Ortak Olasılık', desc: 'P(A ve B) = P(A|B) * P(B) = P(B|A) * P(A) eşitliği yazılır.' },
+            { title: 'Adım 2: Yer Değiştirme', desc: 'İki taraf P(B)ye bölünerek oranlanır.' },
+            { title: 'Adım 3: Temel Formül', desc: 'P(A|B) = [ P(B|A) * P(A) ] / P(B) denklemi elde edilir.' },
+            { title: 'Adım 4: Uygulama', desc: 'Tıbbi testlerde ve yapay zeka öğrenme modellerinde olasılık hesaplamalarının temeli oluşturulur.' }
+        ]
+    },
+    {
+        id: 'ispat-kosinus',
+        cat: 'matematik',
+        icon: '📐',
+        title: 'Kosinüs Teoremi İspatı',
+        desc: 'Herhangi bir üçgende kenarlar ile açılar arasındaki ilişkiyi veren Pisagor genellemesi.',
+        subitems: [
+            { title: 'Adım 1: Dik İndirme', desc: 'Üçgenin bir köşesinden tabana bir dikme (h) indirilir.' },
+            { title: 'Adım 2: Pisagor Uygulama', desc: 'Oluşan iki küçük dik üçgene ayrı ayrı Pisagor teoremi uygulanır.' },
+            { title: 'Adım 3: Trigonometrik Oran', desc: 'Tabandaki parça uzunlukları kosinüs fonksiyonu cinsinden ifade edilir.' },
+            { title: 'Adım 4: Sonuç', desc: 'c² = a² + b² - 2ab * cos(C) bağıntısı türetilir.' }
+        ]
+    },
+    {
+        id: 'ispat-turev-turevlenebilirlik',
+        cat: 'matematik',
+        icon: '📈',
+        title: 'Türevlenebilirlik ve Süreklilik İlişkisi',
+        desc: 'Bir fonksiyonun bir noktada türevi varsa, o noktada kesinlikle sürekli olmasının kanıtı.',
+        subitems: [
+            { title: 'Adım 1: Limit Tanımı', desc: 'lim (x->a) [f(x) - f(a)] limiti ele alınır.' },
+            { title: 'Adım 2: Çarpım/Bölüm Genişletme', desc: 'İfade (x-a) ile çarpılıp bölünerek türev tanımına benzetilir.' },
+            { title: 'Adım 3: Limit Dağılımı', desc: 'lim [f(x) - f(a)] = lim [ (f(x)-f(a))/(x-a) * (x-a) ] yazılır.' },
+            { title: 'Adım 4: Sonuç', desc: 'İşlemin sonucu f\'(a) * 0 = 0 çıkar, bu da lim f(x) = f(a) yani sürekliliği kanıtlar.' }
+        ]
+    },
+    {
+        id: 'ispat-ivme-korunum',
+        cat: 'teorik',
+        icon: '🚀',
+        title: 'Momentum Korunumu İspatı',
+        desc: 'Newton\'un 3. yasasından (etki-tepki) yola çıkarak kapalı sistemlerde momentumun korunduğunun türevi.',
+        subitems: [
+            { title: 'Adım 1: İki Cisimli Sistem', desc: 'Birbirine kuvvet uygulayan m1 ve m2 kütleli iki cisim ele alınır.' },
+            { title: 'Adım 2: Newton 3. Yasa', desc: 'F_12 = -F_21 (uygulanan kuvvetler eşit ve zıttır).' },
+            { title: 'Adım 3: Momentum Değişimi', desc: 'Kuvvet yerine momentumun zamana göre türevi (dp/dt) yazılır.' },
+            { title: 'Adım 4: Toplam Momentum', desc: 'd(p1 + p2)/dt = 0 çıkar, bu da toplam momentumun sabit kaldığını gösterir.' }
+        ]
+    },
+    {
+        id: 'ispat-basit-harmonik',
+        cat: 'teorik',
+        icon: '⏱️',
+        title: 'Basit Harmonik Hareket ve Yay Sarkacı',
+        desc: 'Yay kuvvetinin (F = -kx) dinamik denkleminden salınım periyodunun türetilmesi.',
+        subitems: [
+            { title: 'Adım 1: Dinamik Denge', desc: 'F_net = m * a => -kx = m * (d²x/dt²).' },
+            { title: 'Adım 2: Diferansiyel Denklem', desc: 'd²x/dt² + (k/m)x = 0 ikinci mertebeden diferansiyel denklem kurulur.' },
+            { title: 'Adım 3: Çözüm Fonksiyonu', desc: 'Bu denklemi sağlayan çözüm x(t) = A * cos(ωt + φ) şeklindedir.' },
+            { title: 'Adım 4: Periyot Formülü', desc: 'Açısal hız ω = sqrt(k/m) alınarak T = 2π * sqrt(m/k) periyot formülüne ulaşılır.' }
+        ]
+    },
+    {
+        id: 'ispat-isik-kirilmasi',
+        cat: 'teorik',
+        icon: '🌈',
+        title: 'Snell Kanunu (Işığın Kırılması İspatı)',
+        desc: 'Fermat Prensibi (ışığın en kısa sürede katedeceği yolu seçmesi) kullanarak kırılma kanununun türetilmesi.',
+        subitems: [
+            { title: 'Adım 1: Yol ve Zaman', desc: 'İki farklı ortamda ilerleyen ışığın seyahat süresi t = (d1/v1) + (d2/v2) olarak yazılır.' },
+            { title: 'Adım 2: Geometrik Dağılım', desc: 'Ortam sınırındaki geçiş noktası x değişkeni cinsinden ifade edilir.' },
+            { title: 'Adım 3: Türev Alma', desc: 'Sürenin minimum olması için zamana/konuma göre türevi sıfıra eşitlenir (dt/dx = 0).' },
+            { title: 'Adım 4: Snell Yasası', desc: 'n1 * sin(θ1) = n2 * sin(θ2) kırılma bağıntısı elde edilir.' }
+        ]
+    },
+    {
+        id: 'ispat-gauss-elektrik',
+        cat: 'teorik',
+        icon: '⚡',
+        title: 'Gauss Yasası (Elektrik Alan)',
+        desc: 'Kapalı bir yüzeyden çıkan toplam elektrik akısının, içindeki net yük ile ilişkisinin ispatı.',
+        subitems: [
+            { title: 'Adım 1: Noktasal Yük', desc: 'Merkezde bulunan q yükünün çevresinde hayali küresel bir yüzey (Gauss yüzeyi) çizilir.' },
+            { title: 'Adım 2: Alan Hesabı', desc: 'Küre yüzeyindeki elektrik alan E = q / (4πε₀r²) formülüyle yazılır.' },
+            { title: 'Adım 3: Akı İntegrali', desc: 'Yüzey alanı (4πr²) ile elektrik alan çarpıldığında r\'lerin sadeleştiği görülür.' },
+            { title: 'Adım 4: Sonuç', desc: '∮ E·dA = q / ε₀ Gauss yasası denklemi türetilir.' }
+        ]
+    },
+    {
+        id: 'ispat-maxwell-dalga',
+        cat: 'teorik',
+        icon: '📡',
+        title: 'Maxwell Denklemlerinden Işık Hızının Çıkarımı',
+        desc: 'Elektromanyetik dalgaların boşlukta ışık hızıyla yayıldığının denklemler yoluyla kanıtı.',
+        subitems: [
+            { title: 'Adım 1: Faraday ve Ampere', desc: 'Maxwell denklemlerinin boşluk (yük ve akım yokken) halindeki formları yazılır.' },
+            { title: 'Adım 2: İkinci Mertebe Türev', desc: 'Elektrik ve manyetik alan denklemlerinin uzay ve zamana göre ikinci türevleri alınır.' },
+            { title: 'Adım 3: Dalga Denklemi', desc: 'Elde edilen formülün standart dalga denklemine (∂²u/∂x² = (1/v²) * ∂²u/∂t²) birebir uyduğu görülür.' },
+            { title: 'Adım 4: Işık Hızı', desc: 'Dalga hızının c = 1 / sqrt(μ₀ε₀) olduğu ve bu değerin tam olarak ışık hızını verdiği keşfedilir.' }
+        ]
+    },
+    {
+        id: 'ispat-stirling',
+        cat: 'matematik',
+        icon: '📈',
+        title: 'Stirling Yaklaşımı (Büyük Faktöriyeller)',
+        desc: 'Çok büyük n sayıları için n! (faktöriyel) hesaplamasının yaklaşık formülü.',
+        subitems: [
+            { title: 'Adım 1: Logaritma', desc: 'ln(n!) = ln(1) + ln(2) + ... + ln(n) toplamı integral ile yaklaşım altına alınır.' },
+            { title: 'Adım 2: İntegral Tahmini', desc: '∫ ln(x) dx integrali hesaplanarak n*ln(n) - n ifadesine ulaşılır.' },
+            { title: 'Adım 3: Euler-Maclaurin', desc: 'Düzeltme terimleri eklendiğinde hassasiyet artırılır.' },
+            { title: 'Adım 4: Sonuç', desc: 'n! ≈ sqrt(2πn) * (n/e)^n formülü elde edilir.' }
+        ]
+    },
+    {
+        id: 'ispat-kopekbaligi-biyoloji',
+        cat: 'bilim',
+        icon: '🧬',
+        title: 'Hardy-Weinberg Denge Kanunu',
+        desc: 'Popülasyon genetiğinde gen frekanslarının nesiller boyu nasıl sabit kaldığının matematiksel modeli.',
+        subitems: [
+            { title: 'Adım 1: Allel Frekansları', desc: 'Bir genin iki aleli (p ve q) olduğu kabul edilir (p + q = 1).' },
+            { title: 'Adım 2: Rastgele Çiftleşme', desc: 'Ebeveynlerin gametlerinin birleşme olasılıkları Punnett karesi ile çarpılır.' },
+            { title: 'Adım 3: Genotip Dağılımı', desc: '(p + q)² = p² + 2pq + q² açılımı yapılır.' },
+            { title: 'Adım 4: Denge', desc: 'Dış baskılar (mutasyon, doğal seçilim) olmadıkça bu oranların nesiller boyu değişmediği ispatlanır.' }
+        ]
+    }
+];
